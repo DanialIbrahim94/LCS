@@ -43,11 +43,7 @@ function Cover() {
       .get(`/roles/`)
       .then((res) => {
         /* eslint-disable */
-        const list = res.data.data.forEach((item) => {
-          if (item.id !== 1) {
-            return item;
-          }
-        });
+        const list = res.data.data.filter(item => item.id !== 1);
         console.log(list);
         setRolelist(list);
       })
