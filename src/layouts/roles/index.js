@@ -92,8 +92,8 @@ function RoleManagement() {
     } else {
       axios
         .post(`/roles/`, info)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          getRoleData();
         })
         .then((err) => console.log(err));
     }
