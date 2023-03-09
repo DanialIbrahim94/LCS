@@ -166,6 +166,7 @@ function Tables() {
     const sendData = {
       role: userinfo.role.id,
       business: userinfo.role.id === 1 ? null : userinfo.business.id,
+      role: userinfo.role.id - 3 >= 0 ? 4 : null // for BU and Customers -> Show only customers
     };
     axios
       .post(`/users/list/`, sendData)
