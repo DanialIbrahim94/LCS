@@ -265,9 +265,10 @@ function Tables() {
     axios
       .post(`/users/download/save/`, sendData)
       .then(() => {
-        setDownableNum(downableNum - downUserIDList.length);
+        setDownableNum((downableNum - downUserIDList.length) > 0 ? downableNum - downUserIDList.length : 0);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {window.location.reload(true)});
   };
 
   const getDownableCount = () => {
