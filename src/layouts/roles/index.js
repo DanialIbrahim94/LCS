@@ -85,6 +85,7 @@ function RoleManagement() {
         .put(`/roles/${roleId}`, info)
         .then((res) => {
           console.log(res);
+          getRoleData();
           setRoleId(null);
           setRoleName(null);
         })
