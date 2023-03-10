@@ -41,6 +41,8 @@ function Tables() {
   const [downUserIDList, setDownUserIDList] = useState([]);
   const [requestedCoupons, setRequestedCoupons] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [showRequestCoupons, setShowRequestCoupons] = useState(false);
+  const [init, setInit] = useState(false);
   const headers = [
     { label: "FullName", key: "FullName" },
     { label: "Email", key: "Email" },
@@ -359,9 +361,26 @@ function Tables() {
       }
     }
   }, []);
+  
+  const checkCouponsThreshold = () => {
+    const couponsAmount = userinfo["coupons_amount"]
+    const couponsMinimumAmount = userinfo["coupons_minimum_amount"]
+    const couponsAlreadyRequested = userinfo["coupons_already_requested"] || false
+    console.log(couponsAlreadyRequested, couponsAmount, couponsMinimumAmount);
+
+    if (!couponsAlreadyRequested && couponsAmount < couponsMinimumAmount) {
+      setShowRequestCoupons(true)
+      userinfo["coupons_already_requested"] = true
+      sessionStorage.setItem("userData", JSON.stringify(userinfo))
+    }
+
+    setInit(true)
+  };
 
   return (
     <DashboardLayout>
+      {/* Check if the user needs to recharge */}
+      {!init && userinfo.role.id == 3 && checkCouponsThreshold()}
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
@@ -517,7 +536,7 @@ function Tables() {
         )}
         {userinfo.role.id == 3 && (
           <MDBox width="100%" mt={2} px={2} display="flex" justifyContent="flex-end">
-            <Popup trigger={
+            <Popup open={showRequestCoupons} trigger={
               <Button
                 variant="contained"
                 startIcon={<AddIcon color="white" />}
