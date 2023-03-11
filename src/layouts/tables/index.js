@@ -319,10 +319,15 @@ function Tables() {
         });
         return;
     }
+
     setLoading(true);
     axios
       .post('/coupons/request/', {amount: requestedCoupons, user_id: userinfo.id})
       .then((res) => {
+        const paymentURL = res.data.payment_url;
+        console.log(paymentURL);
+        window.open(paymentURL, '_blank');
+        
         notification.success({
           message: "Successfully requested new coupons!",
           placement: "bottomRight"
@@ -332,7 +337,7 @@ function Tables() {
       .catch((err) => {
         console.log(err);
         notification.error({
-          message: err.response.data.message || "Failed to request coupons!",
+          message: err.response.data.message || "Failed to request coupons!", 
           placement: "bottomRight"
         });
       })
