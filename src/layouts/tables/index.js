@@ -8,8 +8,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import SendIcon from "@mui/icons-material/Send";
-import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputLabel from "@mui/material/InputLabel";
@@ -21,8 +19,8 @@ import axios from "utils/axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { notification } from "antd";
-import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import CouponsRecharge from "layouts/tables/CouponsRecharge";
 
 function Tables() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
@@ -39,10 +37,6 @@ function Tables() {
   const [downableNum, setDownableNum] = useState(0);
   const [downloadData, setDownloadData] = useState([]);
   const [downUserIDList, setDownUserIDList] = useState([]);
-  const [requestedCoupons, setRequestedCoupons] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [showRequestCoupons, setShowRequestCoupons] = useState(false);
-  const [init, setInit] = useState(false);
   const headers = [
     { label: "FullName", key: "FullName" },
     { label: "Email", key: "Email" },
@@ -308,45 +302,6 @@ function Tables() {
     }
   };
 
-  const handleRequestCoupons = () => {
-    if (loading)
-      return
-    
-    if (!requestedCoupons){
-        notification.error({
-          message: "Select a valid option!",
-          placement: "bottomRight"
-        });
-        return;
-    }
-
-    setLoading(true);
-    axios
-      .post('/coupons/request/', {amount: requestedCoupons, user_id: userinfo.id})
-      .then((res) => {
-        const paymentURL = res.data.payment_url;
-        console.log(paymentURL);
-        window.open(paymentURL, '_blank');
-        
-        notification.success({
-          message: "Successfully requested new coupons!",
-          placement: "bottomRight"
-        });
-        getCouponCount();
-      })
-      .catch((err) => {
-        console.log(err);
-        notification.error({
-          message: err.response.data.message || "Failed to request coupons!", 
-          placement: "bottomRight"
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setRequestedCoupons(0)
-      });
-  };
-
   const getCouponCount = () => {
     axios
       .get(`/coupons/count/${userinfo.id}`)
@@ -367,25 +322,9 @@ function Tables() {
     }
   }, []);
   
-  const checkCouponsThreshold = () => {
-    const couponsAmount = userinfo["coupons_amount"]
-    const couponsMinimumAmount = userinfo["coupons_minimum_amount"]
-    const couponsAlreadyRequested = userinfo["coupons_already_requested"] || false
-    console.log(couponsAlreadyRequested, couponsAmount, couponsMinimumAmount);
-
-    if (!couponsAlreadyRequested && couponsAmount < couponsMinimumAmount) {
-      setShowRequestCoupons(true)
-      userinfo["coupons_already_requested"] = true
-      sessionStorage.setItem("userData", JSON.stringify(userinfo))
-    }
-
-    setInit(true)
-  };
 
   return (
     <DashboardLayout>
-      {/* Check if the user needs to recharge */}
-      {!init && userinfo.role.id == 3 && checkCouponsThreshold()}
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
@@ -539,58 +478,6 @@ function Tables() {
             </Button>
           </MDBox>
         )}
-        {userinfo.role.id == 3 && (
-          <MDBox width="100%" mt={2} px={2} display="flex" justifyContent="flex-end">
-            <Popup open={showRequestCoupons} trigger={
-              <Button
-                variant="contained"
-                startIcon={<AddIcon color="white" />}
-              >
-                <MDTypography variant="caption" fontSize="20px" color="white" fontWeight="medium">
-                  Request Coupons
-                </MDTypography>
-              </Button>
-            } modal nested>
-              {close => (
-                <div className="modal" style={{textAlign: 'center'}}>
-                  <div>
-                    <h3>Request New Coupons</h3>
-                  </div>
-
-                  <div className="content" style={{margin: '15px auto'}}>
-                    <MDBox>
-                      <FormControl style={{width: '150px', marginRight: '10px'}}>
-                        <InputLabel id="request-coupons-label">Amount</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={requestedCoupons}
-                          label="Amount"
-                          onChange={(event) => setRequestedCoupons(event.target.value)}
-                          style={{height: '40px'}}
-                        >
-                          <MenuItem value={0}>-</MenuItem>
-                          <MenuItem value={100}>100</MenuItem>
-                          <MenuItem value={250}>250</MenuItem>
-                          <MenuItem value={500}>500</MenuItem>
-                          <MenuItem value={1000}>1000</MenuItem>
-                          <MenuItem value={1500}>1500</MenuItem>
-                        </Select>
-                      </FormControl>
-
-                      <Button variant="contained" endIcon={loading ? <CircularProgress size={16} color="white"/> : <SendIcon color="white" />}mx="10px" onClick={handleRequestCoupons}>
-                          <MDTypography variant="caption" color="white" fontWeight="medium" sx={{ fontSize: "15px" }}>
-                            Request
-                          </MDTypography>
-                      </Button>
-                    </MDBox>
-
-                  </div>
-                </div>
-              )}
-            </Popup>
-          </MDBox>
-        )}
         {userinfo.role.id == 1 && (
           <MDBox>
             <MDBox mt={4} width="50%" mx="auto">
@@ -636,6 +523,7 @@ function Tables() {
             </MDBox>
           </MDBox>
         )}
+        <CouponsRecharge />
       </MDBox>
     </DashboardLayout>
   );
