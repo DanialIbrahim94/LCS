@@ -168,7 +168,7 @@ function Tables() {
     const sendData = {
       role: userinfo.role.id,
       business: userinfo.role.id === 1 ? null : userinfo.business.id,
-      role: userinfo.role.id - 3 >= 0 ? 4 : null // for BU and Customers -> Show only customers
+      role: userinfo.role.id - 3 >= 0 ? 4 : null, // for BU and Customers -> Show only customers
     };
     axios
       .post(`/users/list/`, sendData)
@@ -268,10 +268,14 @@ function Tables() {
     axios
       .post(`/users/download/save/`, sendData)
       .then(() => {
-        setDownableNum((downableNum - downUserIDList.length) > 0 ? downableNum - downUserIDList.length : 0);
+        setDownableNum(
+          downableNum - downUserIDList.length > 0 ? downableNum - downUserIDList.length : 0
+        );
       })
       .catch((err) => console.log(err))
-      .finally(() => {window.location.reload(true)});
+      .finally(() => {
+        window.location.reload(true);
+      });
   };
 
   const getDownableCount = () => {
@@ -321,7 +325,6 @@ function Tables() {
       }
     }
   }, []);
-  
 
   return (
     <DashboardLayout>

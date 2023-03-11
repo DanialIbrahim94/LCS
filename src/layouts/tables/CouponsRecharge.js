@@ -15,6 +15,7 @@ import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import Popup from "reactjs-popup";
 
 function couponsRecharge() {
@@ -33,6 +34,8 @@ function couponsRecharge() {
     { Header: "action", accessor: "action", width: "20%", align: "center" },
   ];
 
+  const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
   const updateRowsData = (data) => {
     const processedRows = data.map((item) => {
       const arr = {
@@ -46,7 +49,7 @@ function couponsRecharge() {
         status: (
           <MDBox lineHeight={1} textAlign="center">
             <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
-              {item.status}
+              {capitalize(item.status)}
             </MDTypography>
           </MDBox>
         ),
@@ -64,17 +67,51 @@ function couponsRecharge() {
             </MDTypography>
           </MDBox>
         ),
-        action: (
-          <MDTypography
-            component="a"
-            href={`/coupon/${item.id}`}
-            variant="caption"
-            color="text"
-            fontWeight="medium"
-          >
-            Checkout <OpenInNewIcon />
-          </MDTypography>
-        ),
+        action:
+          item.status !== "completed" ? (
+            <MDTypography
+              component="a"
+              href="#"
+              onClick={() => {
+                window.open(item.payment_url, "_blank");
+              }}
+              variant="caption"
+              color="text"
+              fontWeight="medium"
+            >
+              Checkout <OpenInNewIcon />
+            </MDTypography>
+          ) : (
+            <MDTypography
+              component="a"
+              href="#"
+              onClick={() => {
+                axios
+                  .get(`/orders/${item.id}/verify/`)
+                  .then((res) => {
+                    const data0 = res.data;
+                    if (data0 && data0.is_valid)
+                      notification.success({
+                        message: "New coupons added to inventory!",
+                        placement: "bottomRight",
+                      });
+                    window.location.reload(true);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    notification.error({
+                      message: err.response.data.message || err.message,
+                      placement: "bottomRight",
+                    });
+                  });
+              }}
+              variant="caption"
+              color="text"
+              fontWeight="medium"
+            >
+              Verify <PublishedWithChangesIcon />
+            </MDTypography>
+          ),
       };
       return arr;
     });
@@ -172,7 +209,7 @@ function couponsRecharge() {
               >
                 <MDBox>
                   <MDTypography variant="h3" color="white">
-                    Requested Order(s): 0
+                    Requested Order(s): {rows.length}
                   </MDTypography>
                 </MDBox>
               </MDBox>
