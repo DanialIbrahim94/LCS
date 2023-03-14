@@ -40,8 +40,23 @@ function Basic() {
             sessionStorage.setItem("userData", JSON.stringify(res.data.data));
             navigate("/tables");
           })
-          .catch((err) => {
-            notification.error({ message: err.response.data, placement: "bottomRight" });
+          .catch((error) => {
+            let reason = "";
+            if (error.response) {
+              reason = "The request was made and the server responded with a status code that falls out of the range of " + error.response.status;
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              reason = "The request was made but no response was received";
+              console.log(error.request);
+            } else {
+              reason = "Something happened in setting up the request that triggered an Error";
+              console.log('Error', error.message);
+            }
+            console.log(error.config);
+
+            notification.error({ message: reason, placement: "bottomRight" });
           });
       }
     }
