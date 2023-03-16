@@ -84,35 +84,43 @@ function couponsRecharge() {
               Checkout <OpenInNewIcon />
             </MDTypography>
           ) : (
-            <MDTypography
-              component="a"
-              href="#"
-              onClick={() => {
-                axios
-                  .get(`/orders/${item.id}/verify/`)
-                  .then((res) => {
-                    const data0 = res.data;
-                    if (data0 && data0.is_valid)
-                      notification.success({
-                        message: "New coupons added to inventory!",
+            <MDBox variant="gradient" bgColor="success" borderRadius="lg" coloredShadow="info">
+              <Button
+                py={1}
+                px={2}
+                endIcon={<PublishedWithChangesIcon color="white" />}
+                onClick={() => {
+                  axios
+                    .get(`/orders/${item.id}/verify/`)
+                    .then((res) => {
+                      const data0 = res.data;
+                      if (data0 && data0.is_valid)
+                        notification.success({
+                          message: "New coupons added to inventory!",
+                          placement: "bottomRight",
+                        });
+                      window.location.reload(true);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      notification.error({
+                        message: err.response.data.message || err.message,
                         placement: "bottomRight",
                       });
-                    window.location.reload(true);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    notification.error({
-                      message: err.response.data.message || err.message,
-                      placement: "bottomRight",
                     });
-                  });
-              }}
-              variant="caption"
-              color="text"
-              fontWeight="medium"
-            >
-              Verify <PublishedWithChangesIcon />
-            </MDTypography>
+                }}
+              >
+                <MDTypography
+                  component="a"
+                  href="#"
+                  variant="caption"
+                  color="white"
+                  fontWeight="medium"
+                >
+                  Verify
+                </MDTypography>
+              </Button>
+            </MDBox>
           ),
       };
       return arr;
