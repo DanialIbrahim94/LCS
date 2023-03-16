@@ -62,12 +62,14 @@ function Overview() {
         notification.success({
           /* eslint-disable */
           message: "Successfully to send Coupon Code to " + userInfo.email,
+          placement: "bottomRight",
         });
         navigate("/tables");
       })
       .catch(() => {
         notification.error({
           message: "Fail to send email.",
+          placement: "bottomRight",
         });
       });
   };

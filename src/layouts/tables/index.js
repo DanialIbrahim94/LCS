@@ -213,11 +213,13 @@ function Tables() {
       .then(() => {
         notification.success({
           message: "Successfully to send email.",
+          placement: "bottomRight",
         });
       })
       .catch(() => {
         notification.error({
           message: "Fail to send email.",
+          placement: "bottomRight",
         });
       });
   };
