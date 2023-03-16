@@ -118,12 +118,12 @@ function CouponHistory() {
                   History
                 </MDTypography>
                 <MDBox>
-                  <Button
-                    variant="outlined"
-                    startIcon={<CloudDownloadIcon color="white" />}
-                    mx="10px"
-                  >
-                    <CSVLink data={downloadData} headers={headers}>
+                  <CSVLink data={downloadData} headers={headers}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<CloudDownloadIcon color="white" />}
+                      mx="10px"
+                    >
                       <MDTypography
                         variant="caption"
                         color="white"
@@ -132,8 +132,8 @@ function CouponHistory() {
                       >
                         Download
                       </MDTypography>
-                    </CSVLink>
-                  </Button>
+                    </Button>
+                  </CSVLink>
                 </MDBox>
               </MDBox>
               <MDBox pt={3}>

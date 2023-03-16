@@ -400,10 +400,10 @@ function Tables() {
                       variant="outlined"
                       startIcon={<AddIcon color="white" />}
                       sx={{ marginRight: "10px" }}
+                      onClick={event =>  window.location.href='/user/add'}
                     >
                       <MDTypography
                         component="a"
-                        href="/user/add"
                         variant="caption"
                         color="white"
                         fontWeight="medium"
@@ -440,6 +440,7 @@ function Tables() {
                   <Button
                     variant="outlined"
                     startIcon={<CloudDownloadIcon color="white" />}
+                    onClick={() => saveDownloadUserData()}
                     mx="10px"
                   >
                     <CSVLink data={downloadData} headers={headers}>
@@ -448,7 +449,6 @@ function Tables() {
                         color="white"
                         fontWeight="medium"
                         sx={{ fontSize: "15px" }}
-                        onClick={() => saveDownloadUserData()}
                       >
                         Download
                       </MDTypography>
