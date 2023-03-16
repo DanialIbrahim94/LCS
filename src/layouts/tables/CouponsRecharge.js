@@ -21,11 +21,12 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import Popup from "reactjs-popup";
 
 function couponsRecharge(props) {
+  const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [showOrders, setShowOrders] = useState(false);
   const [rows, setRows] = useState([]);
-  const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [requestedCoupons, setRequestedCoupons] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [couponsAlreadyRequested, setCouponsAlreadyRequested] = useState(false);
   const [showRequestCoupons, setShowRequestCoupons] = useState(false);
   const [init, setInit] = useState(false);
   const columns = [
@@ -143,18 +144,20 @@ function couponsRecharge(props) {
   };
 
   const checkCouponsThreshold = () => {
-    const couponsAmount = userinfo.coupons_amount;
-    const couponsMinimumAmount = userinfo.coupons_minimum_amount;
-    const couponsAlreadyRequested = userinfo.coupons_already_requested || false;
-    console.log(couponsAlreadyRequested, couponsAmount, couponsMinimumAmount);
+    axios
+      .get(`/coupons/count/${userinfo.id}`)
+      .then((res) => {
+        const couponsAmount = res.data.count;
+        const couponsMinimumAmount = userinfo.coupons_minimum_amount;
+        if (!couponsAlreadyRequested && couponsAmount < couponsMinimumAmount) {
+          sessionStorage.setItem("lastCouponsCount", couponsAmount);
+          setShowRequestCoupons(true);
+          setCouponsAlreadyRequested(true);
+        }
 
-    if (!couponsAlreadyRequested && couponsAmount < couponsMinimumAmount) {
-      setShowRequestCoupons(true);
-      userinfo.coupons_already_requested = true;
-      sessionStorage.setItem("userData", JSON.stringify(userinfo));
-    }
-
-    setInit(true);
+        setInit(true);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleRequestCoupons = () => {
