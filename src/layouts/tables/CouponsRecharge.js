@@ -127,7 +127,7 @@ function couponsRecharge(props) {
                   color="white"
                   fontWeight="medium"
                 >
-                  Verify
+                  Release Codes
                 </MDTypography>
               </Button>
             </MDBox>
