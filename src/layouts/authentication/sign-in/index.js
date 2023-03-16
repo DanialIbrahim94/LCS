@@ -43,7 +43,7 @@ function Basic() {
           .catch((error) => {
             let reason = "";
             if (error.response) {
-              reason = err.response.data;
+              reason = error.response.data;
             } else if (error.request) {
               reason = "Can't reach to the server!";
             } else {
