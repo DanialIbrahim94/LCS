@@ -6,6 +6,7 @@ import MDTypography from "components/MDTypography";
 import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -14,6 +15,7 @@ import DataTable from "examples/Tables/DataTable";
 import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CircularProgress from "@mui/material/CircularProgress";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import Popup from "reactjs-popup";
@@ -119,6 +121,7 @@ function couponsRecharge() {
   };
 
   const getOrders = () => {
+    setLoading(true);
     axios
       .get(`/orders/${userinfo.id}`)
       .then((res) => {
@@ -126,7 +129,8 @@ function couponsRecharge() {
         if (data && data.length > 0) setShowOrders(true);
         updateRowsData(data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
 
   const checkCouponsThreshold = () => {
@@ -211,6 +215,23 @@ function couponsRecharge() {
                   <MDTypography variant="h3" color="white">
                     Requested Order(s): {rows.length}
                   </MDTypography>
+                </MDBox>
+                <MDBox>
+                  <IconButton
+                    color="white"
+                    fontWeight="medium"
+                    style={{ marginRight: "10px" }}
+                    onClick={() => {
+                      updateRowsData([]);
+                      getOrders();
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress color="white" size={36} />
+                    ) : (
+                      <RefreshIcon color="white" onClick={getOrders} fontSize="large" />
+                    )}
+                  </IconButton>
                 </MDBox>
               </MDBox>
               <MDBox pt={3}>
