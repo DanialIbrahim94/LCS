@@ -526,7 +526,7 @@ function Tables() {
             </MDBox>
           </MDBox>
         )}
-        <CouponsRecharge />
+        <CouponsRecharge updateCoupons={getCouponCount} />
       </MDBox>
     </DashboardLayout>
   );

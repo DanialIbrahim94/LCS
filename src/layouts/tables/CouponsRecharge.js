@@ -20,7 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import Popup from "reactjs-popup";
 
-function couponsRecharge() {
+function couponsRecharge(props) {
   const [showOrders, setShowOrders] = useState(false);
   const [rows, setRows] = useState([]);
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
@@ -99,7 +99,8 @@ function couponsRecharge() {
                           message: "New coupons added to inventory!",
                           placement: "bottomRight",
                         });
-                      window.location.reload(true);
+                      getOrders();
+                      props.updateCoupons();
                     })
                     .catch((err) => {
                       console.log(err);
