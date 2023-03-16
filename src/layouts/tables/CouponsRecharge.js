@@ -271,7 +271,7 @@ function couponsRecharge(props) {
       )}
 
       {userinfo.role.id === 3 && (
-        <MDBox width="100%" mt={2} px={2} display="flex" justifyContent="flex-end">
+        <MDBox width="100%" m={2} px={2} display="flex" justifyContent="flex-end">
           <Popup
             open={showRequestCoupons}
             trigger={
@@ -285,14 +285,14 @@ function couponsRecharge(props) {
             nested
           >
             {() => (
-              <div className="modal" style={{ textAlign: "center" }}>
+              <div className="modal" style={{ textAlign: "center", padding: "20px" }}>
                 <div>
                   <h3>Request New Coupons</h3>
                 </div>
 
                 <div className="content" style={{ margin: "15px auto" }}>
                   <MDBox>
-                    <FormControl style={{ width: "150px", marginRight: "10px" }}>
+                    <FormControl style={{ width: "220px", marginRight: "10px" }}>
                       <InputLabel id="request-coupons-label">Amount</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -303,11 +303,11 @@ function couponsRecharge(props) {
                         style={{ height: "40px" }}
                       >
                         <MenuItem value={0}>-</MenuItem>
-                        <MenuItem value={100}>100</MenuItem>
-                        <MenuItem value={250}>250</MenuItem>
-                        <MenuItem value={500}>500</MenuItem>
-                        <MenuItem value={1000}>1000</MenuItem>
-                        <MenuItem value={1500}>1500</MenuItem>
+                        <MenuItem value={100}>100 @ $2.99 each - $299.00</MenuItem>
+                        <MenuItem value={250}>250 @ $2.75 each - $687.50</MenuItem>
+                        <MenuItem value={500}>500 @ $2.50 each - $1250.00</MenuItem>
+                        <MenuItem value={1000}>1000 @ $2.25 each - $2250.00</MenuItem>
+                        <MenuItem value={1500}>1500 @ $2.00 each - $3000.00</MenuItem>
                       </Select>
                     </FormControl>
 
@@ -333,6 +333,26 @@ function couponsRecharge(props) {
                       </MDTypography>
                     </Button>
                   </MDBox>
+                </div>
+
+                <div style={{ marginTop: "20px" }}>
+                  <small>
+                    <MDTypography
+                      variant="body2"
+                      color="black"
+                      fontWeight="small"
+                      sx={{ fontSize: "11px" }}
+                    >
+                      <span style={{ color: "red" }}>
+                        <b>NOTE</b>
+                      </span>
+                      : THERE ARE NO REFUNDS OR RETURNS ONCE A COUPON CODE HAS BEEN ISSUED. DO NOT
+                      PROCEED if you don&apos;t understand, or click on CONTACT US on
+                      <a href="https://datacapturepro.com/contact">
+                        https://datacapturepro.com/contact
+                      </a>
+                    </MDTypography>
+                  </small>
                 </div>
               </div>
             )}
