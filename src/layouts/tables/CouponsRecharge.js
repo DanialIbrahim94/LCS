@@ -31,7 +31,8 @@ function couponsRecharge(props) {
   const [init, setInit] = useState(false);
   const columns = [
     { Header: "ID", accessor: "id", width: "20%", align: "left" },
-    { Header: "Status", accessor: "status", width: "30%", align: "left" },
+    { Header: "Status", accessor: "status", width: "15%", align: "left" },
+    { Header: "Created on", accessor: "date_created", width: "15%", align: "left" },
     { Header: "Total cost", accessor: "total", width: "20%", align: "center" },
     { Header: "Currency", accessor: "currency", width: "10%", align: "center" },
     { Header: "action", accessor: "action", width: "20%", align: "center" },
@@ -53,6 +54,13 @@ function couponsRecharge(props) {
           <MDBox lineHeight={1} textAlign="center">
             <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
               {capitalize(item.status)}
+            </MDTypography>
+          </MDBox>
+        ),
+        date_created: (
+          <MDBox lineHeight={1} textAlign="center">
+            <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
+              {new Date(item.date_created).toLocaleString()}
             </MDTypography>
           </MDBox>
         ),

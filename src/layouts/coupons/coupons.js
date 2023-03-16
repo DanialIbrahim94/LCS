@@ -253,7 +253,7 @@ function Coupons() {
                   {bsUsers && (
                     <Autocomplete
                       options={bsUsers}
-                      getOptionLabel={(option) => option.email}
+                      getOptionLabel={(option) => option.fullName + ': ' + option.email}
                       id="disable-close-on-select"
                       disableCloseOnSelect
                       onChange={handleBSuserSelect}
