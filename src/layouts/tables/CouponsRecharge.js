@@ -307,7 +307,7 @@ function couponsRecharge(props) {
                         <MenuItem value={250}>250 @ $2.75 each - $687.50</MenuItem>
                         <MenuItem value={500}>500 @ $2.50 each - $1250.00</MenuItem>
                         <MenuItem value={1000}>1000 @ $2.25 each - $2250.00</MenuItem>
-                        <MenuItem value={1500}>1500 @ $2.00 each - $3000.00</MenuItem>
+                        <MenuItem value={2500}>2500 @ $1.75 each - $4375.00</MenuItem>
                       </Select>
                     </FormControl>
 
