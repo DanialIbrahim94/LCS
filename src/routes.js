@@ -1,4 +1,3 @@
-import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 /* eslint-disable */
 import Coupons from "layouts/coupons/coupons";
@@ -21,15 +20,6 @@ const Role = {
 };
 
 const routes = [
-  {
-    type: "collapse",
-    name: "Dashboard",
-    key: "dashboard",
-    role: Role.Admin,
-    icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
-    component: <Dashboard />,
-  },
   {
     type: "collapse",
     name: "User Management",

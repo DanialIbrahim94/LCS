@@ -215,6 +215,26 @@ function couponsRecharge(props) {
     <>
       {/* Check if the user needs to recharge */}
       {!init && userinfo.role.id === 3 && checkCouponsThreshold()}
+      {showOrders && (
+        <MDTypography variant="body2">
+          <b>To Get More Coupons, Follow these Steps:</b>
+          <br />
+          &emsp;<span style={{ fontWeight: "400" }}>Step 1:</span> Click Recharge Coupons At The
+          Bottom ofThe Page
+          <br />
+          &emsp;<span style={{ fontWeight: "400" }}>Step 2:</span> Select Your Desired Quantity, And
+          You Will Be Redirected To Our Site To Complete The Purchase.
+          <br />
+          &emsp;<span style={{ fontWeight: "400" }}>Step 3:</span> Fill Out Your Payment Details,
+          The Quantity Will Already Be Preselected And Check Out.
+          <br />
+          &emsp;<span style={{ fontWeight: "400" }}>Step 4:</span> You Will Be Redirected To A Thank
+          You Page
+          <br />
+          &emsp;<span style={{ fontWeight: "400" }}>Step 5:</span> Go Back To Your Dashboard and
+          Click On Release Codes - Your Codes Will Be Updated Instantly.
+        </MDTypography>
+      )}
 
       {showOrders && (
         <Grid container spacing={6} style={{ marginTop: "-5px" }}>
