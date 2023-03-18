@@ -19,6 +19,12 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import Popup from "reactjs-popup";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 function couponsRecharge(props) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
@@ -36,6 +42,22 @@ function couponsRecharge(props) {
     { Header: "Total cost", accessor: "total", width: "20%", align: "center" },
     { Header: "Currency", accessor: "currency", width: "10%", align: "center" },
     { Header: "action", accessor: "action", width: "20%", align: "center" },
+  ];
+  const steps = [
+    { no: "Step 1: ", step: "Click Recharge Coupons At The Bottom of The Page" },
+    {
+      no: "Step 2: ",
+      step: "Select Your Desired Quantity, And You Will Be Redirected To Our Site To Complete The Purchase.",
+    },
+    {
+      no: "Step 3: ",
+      step: "Fill Out Your Payment Details, The Quantity Will Already Be Preselected And Check Out.",
+    },
+    { no: "Step 4: ", step: "You Will Be Redirected To A Thank You Page" },
+    {
+      no: "Step 5: ",
+      step: "Go Back To Your Dashboard and Click On Release Codes - Your Codes Will Be Updated Instantly.",
+    },
   ];
 
   const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
@@ -216,24 +238,51 @@ function couponsRecharge(props) {
       {/* Check if the user needs to recharge */}
       {!init && userinfo.role.id === 3 && checkCouponsThreshold()}
       {showOrders && (
-        <MDTypography variant="body2">
-          <b>To Get More Coupons, Follow these Steps:</b>
-          <br />
-          &emsp;<span style={{ fontWeight: "400" }}>Step 1:</span> Click Recharge Coupons At The
-          Bottom ofThe Page
-          <br />
-          &emsp;<span style={{ fontWeight: "400" }}>Step 2:</span> Select Your Desired Quantity, And
-          You Will Be Redirected To Our Site To Complete The Purchase.
-          <br />
-          &emsp;<span style={{ fontWeight: "400" }}>Step 3:</span> Fill Out Your Payment Details,
-          The Quantity Will Already Be Preselected And Check Out.
-          <br />
-          &emsp;<span style={{ fontWeight: "400" }}>Step 4:</span> You Will Be Redirected To A Thank
-          You Page
-          <br />
-          &emsp;<span style={{ fontWeight: "400" }}>Step 5:</span> Go Back To Your Dashboard and
-          Click On Release Codes - Your Codes Will Be Updated Instantly.
-        </MDTypography>
+        <Grid container spacing={6} style={{ marginTop: "-5px" }}>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+                sx={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <MDBox>
+                  <MDTypography variant="h3" color="white">
+                    How to request a recharge:
+                  </MDTypography>
+                </MDBox>
+              </MDBox>
+              <MDBox pt={3}>
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableBody>
+                      {steps.map((row) => (
+                        <TableRow
+                          key={row.name}
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {row.name}
+                          </TableCell>
+                          <TableCell align="left">
+                            <b>{row.no}</b>
+                            {row.step}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </MDBox>
+            </Card>
+          </Grid>
+        </Grid>
       )}
 
       {showOrders && (
