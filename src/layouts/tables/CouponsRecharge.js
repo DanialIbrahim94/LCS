@@ -101,7 +101,7 @@ function couponsRecharge(props) {
           </MDBox>
         ),
         action:
-          item.status !== "completed" ? (
+          item.status !== "processing" ? (
             <MDTypography
               component="a"
               href="#"
