@@ -173,7 +173,7 @@ function Tables() {
     axios
       .post(`/users/list/`, sendData)
       .then((res) => {
-        setUsers(res.data.data);
+        setUsers(res.data.data.filter(user => user.role.id != 4));
         showTableData(res.data.data);
       })
       .catch((err) => console.log(err));
@@ -490,7 +490,7 @@ function Tables() {
                 {users && (
                   <Autocomplete
                     options={users}
-                    getOptionLabel={(option) => option.email}
+                    getOptionLabel={(option) => option.fullName + ': ' + option.email}
                     id="disable-close-on-select"
                     disableCloseOnSelect
                     multiple
