@@ -271,7 +271,7 @@ function ProfileInfoCard() {
                 label="Password"
                 name="password"
                 variant="standard"
-                value={userinfo.role.id === 3 ? "0000" : ""}
+                value={userinfo.role.id === 3 ? "0000" : null}
                 fullWidth
               />
             </MDBox>
