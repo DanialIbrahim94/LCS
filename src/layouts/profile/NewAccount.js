@@ -67,7 +67,7 @@ function ProfileInfoCard() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    if (data.get("fullName") === "" || data.get("email") === "" || data.get("password") === "") {
+    if (data.get("fullName") === "" || data.get("email") === "") {
       notification.warning({
         message: "Input into fields correctly",
         placement: "bottomRight",
@@ -107,7 +107,7 @@ function ProfileInfoCard() {
             address: data.get("address"),
             birthday: data.get("birthday"),
             phone: data.get("phone"),
-            password: data.get("password"),
+            password: "0000",
             couponCount: 0,
             ...mailData,
           };
@@ -213,7 +213,7 @@ function ProfileInfoCard() {
               </Grid>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="Address" name="address" variant="standard" fullWidth />
+              <MDInput type="text" label="Address (Optional)" name="address" variant="standard" fullWidth />
             </MDBox>
             {userinfo.role.id !== 3 && (
               <MDBox>
@@ -265,15 +265,6 @@ function ProfileInfoCard() {
                 </MDBox>
               </MDBox>
             )}
-            <MDBox mb={2}>
-              <MDInput
-                type="password"
-                label="Password"
-                name="password"
-                variant="standard"
-                fullWidth
-              />
-            </MDBox>
             <MDBox mt={4} mb={1}>
               <MDBox width="50%" mx="auto">
                 <MDButton variant="gradient" color="info" fullWidth type="submit">
