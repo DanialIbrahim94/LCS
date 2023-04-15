@@ -119,7 +119,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      {userinfo && userinfo.role.id === Role.Admin && (
+      {userinfo && userinfo.role.id === Role.AdminBsManager && (
         <NavLink key={routes[5].key} to={routes[5].route}>
           <SidenavCollapse
             name={routes[5].name}
@@ -128,11 +128,20 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      <NavLink key={routes[6].key} to={routes[6].route}>
+      {userinfo && userinfo.role.id === Role.Admin && (
+        <NavLink key={routes[6].key} to={routes[6].route}>
+          <SidenavCollapse
+            name={routes[6].name}
+            icon={routes[6].icon}
+            active={routes[6].key === collapseName}
+          />
+        </NavLink>
+      )}
+      <NavLink key={routes[7].key} to={routes[7].route}>
         <SidenavCollapse
-          name={routes[6].name}
-          icon={routes[6].icon}
-          active={routes[6].key === collapseName}
+          name={routes[7].name}
+          icon={routes[7].icon}
+          active={routes[7].key === collapseName}
         />
       </NavLink>
     </List>

@@ -4,6 +4,7 @@ import Coupons from "layouts/coupons/coupons";
 import Business from "layouts/business";
 import Roles from "layouts/roles";
 import History from "layouts/history";
+import Jotform from "layouts/jotform";
 import Profile from "layouts/profile";
 import CouponSend from "layouts/coupons/couponSend";
 import NewAccount from "layouts/profile/NewAccount";
@@ -67,30 +68,44 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Jotform",
+    key: "jotform",
+    role: Role.AdminBsManager,
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/jotform",
+    component: <Jotform />,
+  },
+  {
+    type: "collapse",
     name: "Sign Out",
     key: "sign-in",
     role: Role.Admin,
-    icon: <Icon fontSize="small">login</Icon>,
+    icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
   },
   {
     key: "sign-up",
+    name: "Sign Out",
+    icon: <Icon fontSize="small">logout</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
   },
   {
     key: "new_user",
+    name: "New User",
     route: "/user/add",
     component: <NewAccount />,
   },
   {
     key: "profile",
+    name: "Profile",
     route: "/profile/:id",
     component: <Profile />,
   },
   {
     key: "couponSend",
+    name: "Coupons Send",
     route: "/coupon/:id",
     component: <CouponSend />,
   },
