@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "utils/axios";
 import { notification } from "antd";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -19,6 +19,13 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import QRCode from "qrcode.react";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Snackbar from "@mui/material/Snackbar";
+import TableRowsIcon from "@mui/icons-material/TableRows";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DataTable from "examples/Tables/DataTable";
 
 function NameInputComponent(props) {
   return (
@@ -90,7 +97,12 @@ function FieldNameInputComponent(props) {
 }
 
 function FormBuilder() {
+  const userinfo = JSON.parse(sessionStorage.getItem("userData"));
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formLink, setFormLink] = useState(null);
+  const [submissionsView, setSubmissionsView] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState([]);
   const initialValues = {
     formName: "",
     formDescription: "",
@@ -102,23 +114,27 @@ function FormBuilder() {
     formElements: Yup.array().min(1, "At least one field is required"),
   });
 
+  const updateUserInfo = (formId) => {
+    userinfo.jotform_id = formId;
+    sessionStorage.setItem("userData", JSON.stringify(userinfo));
+  };
+
   const onSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
     // Call Django view to create new form using Jotform API
     const data = JSON.parse(JSON.stringify(values));
-    console.log(data);
+    data.user_id = userinfo.id;
     axios
       .post(`/jotform/create/`, data)
       .then((res) => {
-        console.log(res);
-        setFormLink(res.data.form_link);
+        updateUserInfo(res.data.form_id);
         notification.success({
           message: res.data.message,
           placement: "bottomRight",
         });
+        setFormLink(res.data.form_url);
       })
       .catch((err) => {
-        console.log(err);
         notification.error({
           message: err.response.data.message || err.message,
           placement: "bottomRight",
@@ -127,6 +143,111 @@ function FormBuilder() {
 
     // Redirect to newly created form
   };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(formLink);
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
+  const capitalize = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : "");
+
+  const getQuestions = (submissions) => {
+    const questions = Object.keys(submissions[0].answers).map((key) => {
+      const value = submissions[0].answers[key].text;
+      return { text: value };
+    });
+
+    return questions;
+  };
+
+  const initSubmissionsTableData = (submissions) => {
+    console.log(submissions);
+    let cols = [
+      { Header: "No", accessor: "no", width: "5%", align: "left" },
+      { Header: "Submission Date", accessor: "submissionDate", width: "20%", align: "left" },
+    ];
+    const questions = getQuestions(submissions);
+    const newCols = questions
+      .filter((question) => question.text)
+      .map((question) => ({
+        Header: capitalize(question.text),
+        accessor: capitalize(question.text),
+      }));
+    cols = cols.concat(newCols);
+    setColumns(cols);
+
+    const datalist = [];
+    let eachRow = [];
+    const data = submissions.map((item, idx) => {
+      eachRow = {
+        submissionDate: item.created_at,
+        Email: item.answers["1"].answer,
+        Phone: item.answers["2"].answer,
+        Rate: item.answers["3"].answer,
+      };
+      datalist.push(eachRow);
+
+      /* eslint-disable no-restricted-syntax, guard-for-in */
+      const results = {
+        no: (
+          <MDBox lineHeight={1} textAlign="center">
+            <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
+              {idx + 1}
+            </MDTypography>
+          </MDBox>
+        ),
+        submissionDate: (
+          <MDBox lineHeight={1} textAlign="center">
+            <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
+              {item.created_at}
+            </MDTypography>
+          </MDBox>
+        ),
+      };
+      for (const key in item.answers) {
+        results[item.answers[key].text] = (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            {typeof item.answers[key].answer === "string"
+              ? item.answers[key].answer
+              : item.answers[key].prettyFormat}
+          </MDTypography>
+        );
+      }
+      /* eslint-enable no-restricted-syntax */
+      return results;
+    });
+    setRows(data);
+  };
+
+  const initSubmissions = () => {
+    axios
+      .get(`/jotform/${userinfo.id}/submissions/`)
+      .then((res) => {
+        initSubmissionsTableData(res.data.submissions);
+      })
+      .catch((err) => {
+        notification.error({
+          message: err.message,
+          placement: "bottomRight",
+        });
+      });
+  };
+
+  useEffect(() => {
+    if (submissionsView) initSubmissions();
+  }, [submissionsView]);
+
+  useEffect(() => {
+    if (userinfo.jotform_id) {
+      const jotformLink = `https://form.jotform.com/${userinfo.jotform_id}`;
+      setFormLink(jotformLink);
+      initSubmissions();
+    }
+  }, []); // Empty array as a dependency to only run once
 
   return (
     <DashboardLayout>
@@ -149,102 +270,201 @@ function FormBuilder() {
                 <MDTypography variant="h3" color="white">
                   Form Builder
                 </MDTypography>
+                {formLink && (
+                  <Button
+                    variant="outlined"
+                    startIcon={
+                      submissionsView ? (
+                        <ArrowBackIcon color="white" />
+                      ) : (
+                        <TableRowsIcon color="white" />
+                      )
+                    }
+                    onClick={() => setSubmissionsView(!submissionsView)}
+                    mx="10px"
+                  >
+                    <MDTypography
+                      variant="caption"
+                      color="white"
+                      fontWeight="medium"
+                      sx={{ fontSize: "15px" }}
+                    >
+                      {submissionsView ? "Back" : "Submissions"}
+                    </MDTypography>
+                  </Button>
+                )}
               </MDBox>
-              <MDBox mx={4} py={3} style={{ margin: "auto" }}>
-                <MDTypography variant="h5" color="black">
-                  {formLink && (
-                    <>
-                      Try it:{" "}
-                      <a href={formLink} target="_blank" rel="noreferrer">
+              <MDBox
+                mx={4}
+                py={3}
+                style={
+                  /* eslint-disable-next-line no-nested-ternary */
+                  !submissionsView
+                    ? formLink
+                      ? {
+                          margin: "30px",
+                          backgroundColor: "#49a3f130",
+                        }
+                      : { margin: "auto" }
+                    : null
+                }
+              >
+                {/* eslint-disable-next-line no-nested-ternary */}
+                {submissionsView ? (
+                  <MDBox pt={3}>
+                    {rows && (
+                      <DataTable
+                        table={{ columns, rows }}
+                        isSorted={false}
+                        entriesPerPage={false}
+                        showTotalEntries={false}
+                        noEndBorder
+                      />
+                    )}
+                  </MDBox>
+                ) : formLink ? (
+                  <MDBox style={{ textAlign: "center" }}>
+                    <MDTypography gutterBottom variant="h5" component="div">
+                      To access your form, Scan this QR code:
+                    </MDTypography>
+
+                    <QRCode
+                      value={formLink}
+                      level="H"
+                      includeMargin="true"
+                      renderAs="canvas"
+                      size={200}
+                    />
+                    <MDTypography variant="h5" component="div" style={{ marginTop: "20px" }}>
+                      Or use this link:
+                    </MDTypography>
+                    <MDBox alignItems="center">
+                      <a
+                        href={formLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: "darkblue" }}
+                      >
                         {formLink}
                       </a>
-                    </>
-                  )}
-                </MDTypography>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={validationSchema}
-                  onSubmit={onSubmit}
-                >
-                  {({ values, isSubmitting }) => (
-                    <Form style={{ width: "500px" }}>
-                      <div>
-                        <Field as={NameInputComponent} name="formName" id="formName" />
-                        <ErrorMessage name="formName" />
-                      </div>
-                      <div>
-                        <Field
-                          as={DescriptionInputComponent}
-                          name="formDescription"
-                          id="formDescription"
-                        />
-                      </div>
-                      <div style={{ margin: "20px 0" }}>
-                        <div
-                          style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}
-                        >
-                          <Divider
-                            style={{ flexGrow: 1, margin: "0 10px", backgroundColor: "black" }}
-                          />
-                          <MDTypography variant="h6">Form Elements</MDTypography>
-                          <Divider
-                            style={{ flexGrow: 1, margin: "0 10px", backgroundColor: "black" }}
+
+                      <CopyToClipboard text={formLink} onCopy={handleCopy}>
+                        <IconButton sx={{ ml: 1 }} size="small">
+                          <FileCopyOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </CopyToClipboard>
+
+                      <Snackbar
+                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                        open={openSnackbar}
+                        autoHideDuration={3000}
+                        onClose={handleCloseSnackbar}
+                        message="Copied!"
+                      />
+                    </MDBox>
+                  </MDBox>
+                ) : (
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={onSubmit}
+                  >
+                    {({ values, isSubmitting }) => (
+                      <Form style={{ width: "500px" }}>
+                        <div>
+                          <Field as={NameInputComponent} name="formName" id="formName" />
+                          <ErrorMessage name="formName" />
+                        </div>
+                        <div>
+                          <Field
+                            as={DescriptionInputComponent}
+                            name="formDescription"
+                            id="formDescription"
                           />
                         </div>
-                        <FieldArray name="formElements" id="formElements">
-                          {({ push, remove }) => (
-                            <>
-                              {values.formElements.map((field, index) => (
-                                <div>
-                                  <div style={{ float: "right" }}>
-                                    <IconButton
-                                      aria-label="delete"
-                                      size="small"
-                                      onClick={() => remove(index)}
-                                    >
-                                      <ClearIcon fontSize="small" />
-                                    </IconButton>
-                                  </div>
-                                  <Field
-                                    as={FieldTypeInputComponent}
-                                    name={`formElements[${index}].type`}
-                                  />
-                                  <Field
-                                    as={FieldNameInputComponent}
-                                    name={`formElements[${index}].text`}
-                                  />
-                                </div>
-                              ))}
-                              <Button
-                                variant="contained"
-                                onClick={() => push({ type: "", name: "" })}
-                                style={{ width: "100%", borderRadius: "0", marginTop: "10px" }}
-                              >
-                                <MDTypography variant="caption" color="white" fontWeight="medium">
-                                  <AddIcon color="white" fontSize="large" />
-                                </MDTypography>
-                              </Button>
-                            </>
-                          )}
-                        </FieldArray>
-                        <ErrorMessage name="formElements" />
-                      </div>
-                      <MDBox style={{ float: "right" }}>
-                        <Button type="submit" disabled={isSubmitting} variant="contained">
-                          <MDTypography
-                            variant="caption"
-                            fontSize="15px"
-                            color="white"
-                            fontWeight="medium"
-                            style={{ paddingLeft: "5px" }}
+                        <div style={{ margin: "20px 0" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              marginBottom: "20px",
+                            }}
                           >
-                            Create Form
-                          </MDTypography>
-                        </Button>
-                      </MDBox>
-                    </Form>
-                  )}
-                </Formik>
+                            <Divider
+                              style={{
+                                flexGrow: 1,
+                                margin: "0 10px",
+                                backgroundColor: "black",
+                              }}
+                            />
+                            <MDTypography variant="h6">Form Elements</MDTypography>
+                            <Divider
+                              style={{
+                                flexGrow: 1,
+                                margin: "0 10px",
+                                backgroundColor: "black",
+                              }}
+                            />
+                          </div>
+                          <FieldArray name="formElements" id="formElements">
+                            {({ push, remove }) => (
+                              <>
+                                {values.formElements.map((field, index) => (
+                                  <div>
+                                    <div style={{ float: "right" }}>
+                                      <IconButton
+                                        aria-label="delete"
+                                        size="small"
+                                        onClick={() => remove(index)}
+                                      >
+                                        <ClearIcon fontSize="small" />
+                                      </IconButton>
+                                    </div>
+                                    <Field
+                                      as={FieldTypeInputComponent}
+                                      name={`formElements[${index}].type`}
+                                    />
+                                    <Field
+                                      as={FieldNameInputComponent}
+                                      name={`formElements[${index}].text`}
+                                    />
+                                  </div>
+                                ))}
+                                <Button
+                                  variant="contained"
+                                  onClick={() => push({ type: "", name: "" })}
+                                  style={{
+                                    width: "100%",
+                                    borderRadius: "0",
+                                    marginTop: "10px",
+                                  }}
+                                >
+                                  <MDTypography variant="caption" color="white" fontWeight="medium">
+                                    <AddIcon color="white" fontSize="large" />
+                                  </MDTypography>
+                                </Button>
+                              </>
+                            )}
+                          </FieldArray>
+                          <ErrorMessage name="formElements" />
+                        </div>
+                        <MDBox style={{ float: "right" }}>
+                          <Button type="submit" disabled={isSubmitting} variant="contained">
+                            <MDTypography
+                              variant="caption"
+                              fontSize="15px"
+                              color="white"
+                              fontWeight="medium"
+                              style={{ paddingLeft: "5px" }}
+                            >
+                              Create Form
+                            </MDTypography>
+                          </Button>
+                        </MDBox>
+                      </Form>
+                    )}
+                  </Formik>
+                )}
               </MDBox>
             </Card>
           </Grid>
