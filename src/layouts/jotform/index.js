@@ -26,6 +26,7 @@ import Snackbar from "@mui/material/Snackbar";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DataTable from "examples/Tables/DataTable";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 
 function NameInputComponent(props) {
   return (
@@ -100,6 +101,7 @@ function FormBuilder() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formLink, setFormLink] = useState(null);
+  const [submissions, setSubmissions] = useState(null);
   const [submissionsView, setSubmissionsView] = useState(false);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -155,22 +157,22 @@ function FormBuilder() {
 
   const capitalize = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : "");
 
-  const getQuestions = (submissions) => {
-    const questions = Object.keys(submissions[0].answers).map((key) => {
-      const value = submissions[0].answers[key].text;
+  const getQuestions = (subs) => {
+    const questions = Object.keys(subs[0].answers).map((key) => {
+      const value = subs[0].answers[key].text;
       return { text: value };
     });
 
     return questions;
   };
 
-  const initSubmissionsTableData = (submissions) => {
-    console.log(submissions);
+  const initSubmissionsTableData = (subs) => {
+    console.log(subs);
     let cols = [
       { Header: "No", accessor: "no", width: "5%", align: "left" },
       { Header: "Submission Date", accessor: "submissionDate", width: "20%", align: "left" },
     ];
-    const questions = getQuestions(submissions);
+    const questions = getQuestions(subs);
     const newCols = questions
       .filter((question) => question.text)
       .map((question) => ({
@@ -180,17 +182,7 @@ function FormBuilder() {
     cols = cols.concat(newCols);
     setColumns(cols);
 
-    const datalist = [];
-    let eachRow = [];
-    const data = submissions.map((item, idx) => {
-      eachRow = {
-        submissionDate: item.created_at,
-        Email: item.answers["1"].answer,
-        Phone: item.answers["2"].answer,
-        Rate: item.answers["3"].answer,
-      };
-      datalist.push(eachRow);
-
+    const data = subs.map((item, idx) => {
       /* eslint-disable no-restricted-syntax, guard-for-in */
       const results = {
         no: (
@@ -227,9 +219,11 @@ function FormBuilder() {
     axios
       .get(`/jotform/${userinfo.id}/submissions/`)
       .then((res) => {
-        initSubmissionsTableData(res.data.submissions);
+        setSubmissions(res.data.submissions);
+        if (submissions && submissions.length > 0) initSubmissionsTableData(submissions);
       })
       .catch((err) => {
+        console.log(err);
         notification.error({
           message: err.message,
           placement: "bottomRight",
@@ -312,6 +306,14 @@ function FormBuilder() {
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {submissionsView ? (
                   <MDBox pt={3}>
+                    {submissions && submissions.length === 0 && (
+                      <MDBox style={{ textAlign: "center" }} mb={-5}>
+                        <MDTypography gutterBottom fontWeight="medium" component="div">
+                          Nothing to see in here
+                        </MDTypography>
+                        <SentimentDissatisfiedIcon fontSize="large" />
+                      </MDBox>
+                    )}
                     {rows && (
                       <DataTable
                         table={{ columns, rows }}
