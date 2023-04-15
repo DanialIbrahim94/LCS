@@ -65,24 +65,24 @@ function FieldTypeInputComponent(props) {
           {...props}
         >
           <MenuItem value="control_textbox">Text</MenuItem>
-          <MenuItem value="control_textarea">Text Area</MenuItem>
+          {/* <MenuItem value="control_textarea">Text Area</MenuItem> */}
           <MenuItem value="control_email">Email</MenuItem>
           <MenuItem value="control_phone">Phone</MenuItem>
-          <MenuItem value="control_dropdown">Dropdown</MenuItem>
-          <MenuItem value="control_checkbox">Checkboxes</MenuItem>
-          <MenuItem value="control_radio">Radio Buttons</MenuItem>
+          {/* <MenuItem value="control_dropdown">Dropdown</MenuItem> */}
+          {/* <MenuItem value="control_checkbox">Checkboxes</MenuItem> */}
+          {/* <MenuItem value="control_radio">Radio Buttons</MenuItem> */}
           <MenuItem value="control_scale">Scale Rating</MenuItem>
-          <MenuItem value="control_matrix">Matrix</MenuItem>
+          {/* <MenuItem value="control_matrix">Matrix</MenuItem> */}
           <MenuItem value="control_time">Time</MenuItem>
           <MenuItem value="control_datetime">Date</MenuItem>
           <MenuItem value="control_address">Address</MenuItem>
-          <MenuItem value="control_fileupload">File Upload</MenuItem>
-          <MenuItem value="control_image">Image Upload</MenuItem>
+          {/* <MenuItem value="control_fileupload">File Upload</MenuItem> */}
+          {/* <MenuItem value="control_image">Image Upload</MenuItem> */}
           <MenuItem value="control_signature">Signature</MenuItem>
           <MenuItem value="control_number">Number</MenuItem>
-          <MenuItem value="control_website">Website</MenuItem>
-          <MenuItem value="control_head">HTML</MenuItem>
-          <MenuItem value="control_accept">Terms and Conditions</MenuItem>
+          {/* <MenuItem value="control_website">Website</MenuItem> */}
+          {/* <MenuItem value="control_head">HTML</MenuItem> */}
+          {/* <MenuItem value="control_accept">Terms and Conditions</MenuItem> */}
         </Select>
       </FormControl>
     </MDBox>
