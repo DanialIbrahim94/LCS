@@ -7,18 +7,8 @@ import MDBox from "components/MDBox";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
-import TextField from "@mui/material/TextField";
 import MDTypography from "components/MDTypography";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import IconButton from "@mui/material/IconButton";
 import QRCode from "qrcode.react";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -27,77 +17,10 @@ import TableRowsIcon from "@mui/icons-material/TableRows";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DataTable from "examples/Tables/DataTable";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import FormBuilder from "./formBuilder";
 
-function NameInputComponent(props) {
-  return (
-    <MDBox mt={3}>
-      <TextField style={{ width: "100%" }} id="formName" label="Form Name" type="text" {...props} />
-    </MDBox>
-  );
-}
-
-function DescriptionInputComponent(props) {
-  return (
-    <MDBox mt={3}>
-      <TextField
-        style={{ width: "100%" }}
-        id="formDescription"
-        label="Form Description"
-        type="text"
-        rows={3}
-        multiline
-        {...props}
-      />
-    </MDBox>
-  );
-}
-
-function FieldTypeInputComponent(props) {
-  return (
-    <MDBox>
-      <FormControl style={{ marginBottom: "10px" }} fullWidth>
-        <InputLabel id="elementTypeLabel">Element Type</InputLabel>
-        <Select
-          style={{ height: "44px" }}
-          labelId="elementTypeLabel"
-          id="elementTypeInput"
-          label="Element Type"
-          {...props}
-        >
-          <MenuItem value="control_textbox">Text</MenuItem>
-          {/* <MenuItem value="control_textarea">Text Area</MenuItem> */}
-          <MenuItem value="control_email">Email</MenuItem>
-          <MenuItem value="control_phone">Phone</MenuItem>
-          {/* <MenuItem value="control_dropdown">Dropdown</MenuItem> */}
-          {/* <MenuItem value="control_checkbox">Checkboxes</MenuItem> */}
-          {/* <MenuItem value="control_radio">Radio Buttons</MenuItem> */}
-          <MenuItem value="control_scale">Scale Rating</MenuItem>
-          {/* <MenuItem value="control_matrix">Matrix</MenuItem> */}
-          <MenuItem value="control_time">Time</MenuItem>
-          <MenuItem value="control_datetime">Date</MenuItem>
-          <MenuItem value="control_address">Address</MenuItem>
-          {/* <MenuItem value="control_fileupload">File Upload</MenuItem> */}
-          {/* <MenuItem value="control_image">Image Upload</MenuItem> */}
-          <MenuItem value="control_signature">Signature</MenuItem>
-          <MenuItem value="control_number">Number</MenuItem>
-          {/* <MenuItem value="control_website">Website</MenuItem> */}
-          {/* <MenuItem value="control_head">HTML</MenuItem> */}
-          {/* <MenuItem value="control_accept">Terms and Conditions</MenuItem> */}
-        </Select>
-      </FormControl>
-    </MDBox>
-  );
-}
-
-function FieldNameInputComponent(props) {
-  return (
-    <MDBox mb={3}>
-      <TextField style={{ width: "100%" }} label="Element Name" type="text" {...props} />
-    </MDBox>
-  );
-}
-
-function FormBuilder() {
+function Jotform() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formLink, setFormLink] = useState(null);
@@ -105,46 +28,6 @@ function FormBuilder() {
   const [submissionsView, setSubmissionsView] = useState(false);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
-  const initialValues = {
-    formName: "",
-    formDescription: "",
-    formElements: [],
-  };
-
-  const validationSchema = Yup.object({
-    formName: Yup.string().required("Required"),
-    formElements: Yup.array().min(1, "At least one field is required"),
-  });
-
-  const updateUserInfo = (formId) => {
-    userinfo.jotform_id = formId;
-    sessionStorage.setItem("userData", JSON.stringify(userinfo));
-  };
-
-  const onSubmit = async (values, { setSubmitting }) => {
-    setSubmitting(true);
-    // Call Django view to create new form using Jotform API
-    const data = JSON.parse(JSON.stringify(values));
-    data.user_id = userinfo.id;
-    axios
-      .post(`/jotform/create/`, data)
-      .then((res) => {
-        updateUserInfo(res.data.form_id);
-        notification.success({
-          message: res.data.message,
-          placement: "bottomRight",
-        });
-        setFormLink(res.data.form_url);
-      })
-      .catch((err) => {
-        notification.error({
-          message: err.response.data.message || err.message,
-          placement: "bottomRight",
-        });
-      });
-
-    // Redirect to newly created form
-  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(formLink);
@@ -230,6 +113,28 @@ function FormBuilder() {
         });
       });
   };
+  const downloadSubmissions = () => {
+    axios({
+      url: `/jotform/${userinfo.id}/submissions/download/`,
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((err) => {
+        console.log(err);
+        notification.error({
+          message: err.message,
+          placement: "bottomRight",
+        });
+      });
+  };
 
   useEffect(() => {
     if (submissionsView) initSubmissions();
@@ -265,27 +170,46 @@ function FormBuilder() {
                   Form Builder
                 </MDTypography>
                 {formLink && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      submissionsView ? (
-                        <ArrowBackIcon color="white" />
-                      ) : (
-                        <TableRowsIcon color="white" />
-                      )
-                    }
-                    onClick={() => setSubmissionsView(!submissionsView)}
-                    mx="10px"
-                  >
-                    <MDTypography
-                      variant="caption"
-                      color="white"
-                      fontWeight="medium"
-                      sx={{ fontSize: "15px" }}
+                  <>
+                    {submissionsView && submissions && submissions.length !== 0 && (
+                      <Button
+                        variant="outlined"
+                        startIcon={<CloudDownloadIcon color="white" />}
+                        onClick={downloadSubmissions}
+                        mx="10px"
+                      >
+                        <MDTypography
+                          variant="caption"
+                          color="white"
+                          fontWeight="medium"
+                          sx={{ fontSize: "15px" }}
+                        >
+                          Download
+                        </MDTypography>
+                      </Button>
+                    )}
+                    <Button
+                      variant="outlined"
+                      startIcon={
+                        submissionsView ? (
+                          <ArrowBackIcon color="white" />
+                        ) : (
+                          <TableRowsIcon color="white" />
+                        )
+                      }
+                      onClick={() => setSubmissionsView(!submissionsView)}
+                      mx="10px"
                     >
-                      {submissionsView ? "Back" : "Submissions"}
-                    </MDTypography>
-                  </Button>
+                      <MDTypography
+                        variant="caption"
+                        color="white"
+                        fontWeight="medium"
+                        sx={{ fontSize: "15px" }}
+                      >
+                        {submissionsView ? "Back" : "Submissions"}
+                      </MDTypography>
+                    </Button>
+                  </>
                 )}
               </MDBox>
               <MDBox
@@ -299,7 +223,7 @@ function FormBuilder() {
                           margin: "30px",
                           backgroundColor: "#49a3f130",
                         }
-                      : { margin: "auto" }
+                      : { margin: "none" }
                     : null
                 }
               >
@@ -366,106 +290,7 @@ function FormBuilder() {
                     </MDBox>
                   </MDBox>
                 ) : (
-                  <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    onSubmit={onSubmit}
-                  >
-                    {({ values, isSubmitting }) => (
-                      <Form style={{ width: "500px" }}>
-                        <div>
-                          <Field as={NameInputComponent} name="formName" id="formName" />
-                          <ErrorMessage name="formName" />
-                        </div>
-                        <div>
-                          <Field
-                            as={DescriptionInputComponent}
-                            name="formDescription"
-                            id="formDescription"
-                          />
-                        </div>
-                        <div style={{ margin: "20px 0" }}>
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              marginBottom: "20px",
-                            }}
-                          >
-                            <Divider
-                              style={{
-                                flexGrow: 1,
-                                margin: "0 10px",
-                                backgroundColor: "black",
-                              }}
-                            />
-                            <MDTypography variant="h6">Form Elements</MDTypography>
-                            <Divider
-                              style={{
-                                flexGrow: 1,
-                                margin: "0 10px",
-                                backgroundColor: "black",
-                              }}
-                            />
-                          </div>
-                          <FieldArray name="formElements" id="formElements">
-                            {({ push, remove }) => (
-                              <>
-                                {values.formElements.map((field, index) => (
-                                  <div>
-                                    <div style={{ float: "right" }}>
-                                      <IconButton
-                                        aria-label="delete"
-                                        size="small"
-                                        onClick={() => remove(index)}
-                                      >
-                                        <ClearIcon fontSize="small" />
-                                      </IconButton>
-                                    </div>
-                                    <Field
-                                      as={FieldTypeInputComponent}
-                                      name={`formElements[${index}].type`}
-                                    />
-                                    <Field
-                                      as={FieldNameInputComponent}
-                                      name={`formElements[${index}].text`}
-                                    />
-                                  </div>
-                                ))}
-                                <Button
-                                  variant="contained"
-                                  onClick={() => push({ type: "", name: "" })}
-                                  style={{
-                                    width: "100%",
-                                    borderRadius: "0",
-                                    marginTop: "10px",
-                                  }}
-                                >
-                                  <MDTypography variant="caption" color="white" fontWeight="medium">
-                                    <AddIcon color="white" fontSize="large" />
-                                  </MDTypography>
-                                </Button>
-                              </>
-                            )}
-                          </FieldArray>
-                          <ErrorMessage name="formElements" />
-                        </div>
-                        <MDBox style={{ float: "right" }}>
-                          <Button type="submit" disabled={isSubmitting} variant="contained">
-                            <MDTypography
-                              variant="caption"
-                              fontSize="15px"
-                              color="white"
-                              fontWeight="medium"
-                              style={{ paddingLeft: "5px" }}
-                            >
-                              Create Form
-                            </MDTypography>
-                          </Button>
-                        </MDBox>
-                      </Form>
-                    )}
-                  </Formik>
+                  <FormBuilder setFormLink={setFormLink} />
                 )}
               </MDBox>
             </Card>
@@ -476,4 +301,4 @@ function FormBuilder() {
   );
 }
 
-export default FormBuilder;
+export default Jotform;

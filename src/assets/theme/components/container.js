@@ -17,7 +17,6 @@ Coded by www.creative-tim.com
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Material Dashboard 2 React helper functions
-import pxToRem from "assets/theme/functions/pxToRem";
 
 const {
   values: { sm, md, lg, xl, xxl },
@@ -30,10 +29,6 @@ const XL = `@media (min-width: ${xl}px)`;
 const XXL = `@media (min-width: ${xxl}px)`;
 
 const sharedClasses = {
-  paddingRight: `${pxToRem(24)} !important`,
-  paddingLeft: `${pxToRem(24)} !important`,
-  marginRight: "auto !important",
-  marginLeft: "auto !important",
   width: "100% !important",
   position: "relative",
 };
