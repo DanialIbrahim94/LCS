@@ -15,10 +15,12 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import Snackbar from "@mui/material/Snackbar";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EditIcon from "@mui/icons-material/Edit";
 import DataTable from "examples/Tables/DataTable";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import FormBuilder from "./formBuilder";
+import FormEditor from "./formEditor";
 
 function Jotform() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
@@ -26,8 +28,13 @@ function Jotform() {
   const [formLink, setFormLink] = useState(null);
   const [submissions, setSubmissions] = useState(null);
   const [submissionsView, setSubmissionsView] = useState(false);
+  const [editorView, setEditorView] = useState(false);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [initialValues, setInitialValues] = useState({
+    formName: "Form Name",
+    formElements: [],
+  });
 
   const handleCopy = () => {
     navigator.clipboard.writeText(formLink);
@@ -136,6 +143,37 @@ function Jotform() {
       });
   };
 
+  const initJotForm = () => {
+    axios
+      .get(`/jotform/${userinfo.id}/`)
+      .then((res) => {
+        console.log(res);
+        const formName = res.data.form.name;
+        const { questions } = res.data.form;
+        const formElements = [];
+
+        // Loop through each question in the response and format it as desired
+        Object.keys(questions).forEach((key) => {
+          const question = questions[key];
+          const identifier = `control_${question.type}_${question.qid}`;
+          const { type } = question;
+          const { text } = question;
+          const required = question.required === "Yes";
+
+          formElements.push({ identifier, type, text, required });
+        });
+        // Set the state with the formatted data
+        setInitialValues({ formName, formElements });
+      })
+      .catch((err) => {
+        console.log(err);
+        notification.error({
+          message: err.response, // .data.message || err.message,
+          placement: "bottomRight",
+        });
+      });
+  };
+
   useEffect(() => {
     if (submissionsView) initSubmissions();
   }, [submissionsView]);
@@ -145,6 +183,7 @@ function Jotform() {
       const jotformLink = `https://form.jotform.com/${userinfo.jotform_id}`;
       setFormLink(jotformLink);
       initSubmissions();
+      initJotForm();
     }
   }, []); // Empty array as a dependency to only run once
 
@@ -169,7 +208,25 @@ function Jotform() {
                 <MDTypography variant="h3" color="white">
                   Form Builder
                 </MDTypography>
-                {formLink && (
+
+                {!submissionsView && (
+                  <Button
+                    variant="outlined"
+                    startIcon={<EditIcon color="white" />}
+                    onClick={() => setEditorView(!editorView)}
+                    style={{ marginLeft: "auto", marginRight: "15px" }}
+                  >
+                    <MDTypography
+                      variant="caption"
+                      color="white"
+                      fontWeight="medium"
+                      sx={{ fontSize: "15px" }}
+                    >
+                      {editorView ? "View Form" : "Edit Form"}
+                    </MDTypography>
+                  </Button>
+                )}
+                {formLink && !editorView && (
                   <>
                     {submissionsView && submissions && submissions.length !== 0 && (
                       <Button
@@ -248,7 +305,8 @@ function Jotform() {
                       />
                     )}
                   </MDBox>
-                ) : formLink ? (
+                ) : /* eslint-disable-next-line no-nested-ternary */
+                formLink && !editorView ? (
                   <MDBox style={{ textAlign: "center" }}>
                     <MDTypography gutterBottom variant="h5" component="div">
                       To access your form, Scan this QR code:
@@ -289,8 +347,10 @@ function Jotform() {
                       />
                     </MDBox>
                   </MDBox>
-                ) : (
+                ) : !editorView ? (
                   <FormBuilder setFormLink={setFormLink} />
+                ) : (
+                  <FormEditor initialValues={initialValues} />
                 )}
               </MDBox>
             </Card>
