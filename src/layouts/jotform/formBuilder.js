@@ -153,8 +153,8 @@ function ElementList(push) {
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.level1" }} aria-label="Items">
       {generateElement(
         push,
-        "control_textbox_fullname",
-        "control_textbox",
+        "control_fullname",
+        "control_fullname",
         "Type a question",
         "Full Name",
         <AccountBoxIcon />
@@ -237,7 +237,7 @@ function ElementList(push) {
 
 function getFieldRepr(field) {
   switch (field.identifier) {
-    case "control_textbox_fullname":
+    case "control_fullname":
       return (
         <Grid container spacing={2}>
           <Grid item xs={6} style={{ textAlign: "center", paddingTop: "0" }}>
