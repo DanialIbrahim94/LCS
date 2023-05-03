@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 import axios from "utils/axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
@@ -24,12 +24,18 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import EmailIcon from "@mui/icons-material/Email";
 import RoomIcon from "@mui/icons-material/Room";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import StarIcon from "@mui/icons-material/Star";
 import Looks3Icon from "@mui/icons-material/Looks3";
 import NotesIcon from "@mui/icons-material/Notes";
 import ShortTextIcon from "@mui/icons-material/ShortText";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
+import AdjustIcon from "@mui/icons-material/Adjust";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import TodayIcon from "@mui/icons-material/Today";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import GestureIcon from "@mui/icons-material/Gesture";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import InputBase from "@mui/material/InputBase";
 import Rating from "@mui/material/Rating";
@@ -46,6 +52,7 @@ import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Modal from "@mui/material/Modal";
+import multiChoiceInputComponent from "./multiChoiceInputComponent";
 
 const useStyles = makeStyles({
   input: {
@@ -128,7 +135,7 @@ function FieldRequiredCheckboxComponent(props) {
 /* <MenuItem value="control_datetime">Date</MenuItem> */
 /* <MenuItem value="control_signature">Signature</MenuItem> */
 
-function generateElement(push, identifier, type, text, repr, icon, required = true) {
+function generateElement(push, identifier, type, text, repr, icon, required = true, options = "") {
   return (
     <ListItem style={{ borderBottom: "1px solid #00000038" }} disablePadding>
       <ListItemButton
@@ -137,6 +144,7 @@ function generateElement(push, identifier, type, text, repr, icon, required = tr
             identifier,
             type,
             text,
+            options,
             required,
           })
         }
@@ -203,9 +211,17 @@ function ElementList(push) {
         push,
         "control_time",
         "control_time",
-        "Pick a Time",
-        "Pick a Time",
+        "Type a question",
+        "Time",
         <AccessTimeFilledIcon />
+      )}
+      {generateElement(
+        push,
+        "control_datetime",
+        "control_datetime",
+        "Type a question",
+        "Date",
+        <CalendarTodayIcon />
       )}
       {generateElement(
         push,
@@ -228,14 +244,54 @@ function ElementList(push) {
         "control_dropdown",
         "control_dropdown",
         "Type a question",
-        "Dropdown (X)",
+        "Dropdown",
         <ExpandCircleDownIcon />
+      )}
+      {generateElement(
+        push,
+        "control_radio",
+        "control_radio",
+        "Type a question",
+        "Radio",
+        <AdjustIcon />
+      )}
+      {generateElement(
+        push,
+        "control_checkbox",
+        "control_checkbox",
+        "Type a question",
+        "Checkbox",
+        <CheckBoxIcon />
+      )}
+      {generateElement(
+        push,
+        "control_fileupload",
+        "control_fileupload",
+        "Type a question",
+        "File Uploader",
+        <FileUploadIcon />
+      )}
+      {generateElement(
+        push,
+        "control_signature",
+        "control_signature",
+        "Type a question",
+        "Signature",
+        <GestureIcon />
+      )}
+      {generateElement(
+        push,
+        "control_captcha",
+        "control_captcha",
+        "Type a question",
+        "Captcha",
+        <SmartToyIcon />
       )}
     </List>
   );
 }
 
-function getFieldRepr(field) {
+function getFieldRepr(field, index) {
   switch (field.identifier) {
     case "control_fullname":
       return (
@@ -313,6 +369,18 @@ function getFieldRepr(field) {
           </Grid>
         </Grid>
       );
+    case "control_datetime":
+      return (
+        <Grid container mt={-5} style={{ padding: "0" }}>
+          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
+            <img
+              src="https://assets.uigarage.net/content/uploads/2019/06/image.png"
+              alt=""
+              style={{ width: "100%", height: "100%" }}
+            />
+          </Grid>
+        </Grid>
+      );
     case "control_address":
       return (
         <Grid container spacing={2} style={{ padding: "0" }}>
@@ -368,25 +436,38 @@ function getFieldRepr(field) {
         </Grid>
       );
     case "control_dropdown":
+      return null;
+    case "control_radio":
+      return null;
+    case "control_checkbox":
+      return null;
+    case "control_fileupload":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField
-              label="Please Select"
-              type="text"
-              variant="outlined"
-              style={{ width: "100%" }}
-              disabled
+            <img
+              src="https://css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif"
+              alt=""
+              style={{ width: "100%", height: "100%" }}
             />
-            <TextField
-              label="Type options"
-              type="text"
-              variant="outlined"
-              style={{ width: "100%", marginTop: "5px" }}
-              multiline
-              rows={4}
-              disabled
-            />
+          </Grid>
+        </Grid>
+      );
+    case "control_signature":
+      return (
+        <Grid container style={{ padding: "0" }}>
+          <Grid
+            item
+            xs={12}
+            style={{ height: "200px", borderColor: "cadetblue", borderStyle: "double" }}
+          />
+        </Grid>
+      );
+    case "control_captcha":
+      return (
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
+            <img src="https://www.octoparse.fr/media/2110/captcha-1.jpg" alt="" />
           </Grid>
         </Grid>
       );
@@ -397,9 +478,9 @@ function getFieldRepr(field) {
 
 function FormBuilder({ setFormLink }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
-  const [open, setOpen] = React.useState(false);
-  const [openChild, setOpenChild] = React.useState(false);
-  const [welcomePage, setWelcomePage] = React.useState({
+  const [open, setOpen] = useState(false);
+  const [openChild, setOpenChild] = useState(false);
+  const [welcomePage, setWelcomePage] = useState({
     title: "Welcome",
     subTitle: "Hi there, please fill out and submit this form.",
     buttonText: "Start",
@@ -436,6 +517,7 @@ function FormBuilder({ setFormLink }) {
     setSubmitting(true);
     // Call Django view to create new form using Jotform API
     const data = JSON.parse(JSON.stringify(values));
+    console.log(data);
     data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     axios
@@ -465,7 +547,11 @@ function FormBuilder({ setFormLink }) {
       [name]: value,
     }));
   };
-
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
   return (
     <>
       <div
@@ -553,8 +639,9 @@ function FormBuilder({ setFormLink }) {
         </Box>
       </Modal>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-        {({ values, isSubmitting }) => (
-          <Form>
+        {({ values, setValues, isSubmitting }) => (
+          <Form onKeyDown={handleKeyDown}>
+            {console.log(values, isSubmitting)}
             <div style={{ textAlign: "center" }}>
               <Field
                 as={NameInputComponent}
@@ -595,7 +682,7 @@ function FormBuilder({ setFormLink }) {
                           flexShrink: 0,
                           "& .MuiDrawer-paper": {
                             position: "absolute",
-                            height: "auto",
+                            height: "-webkit-fill-available",
                             width: drawerWidth,
                             borderRadius: 0,
                             margin: "64px 0 0 0",
@@ -658,8 +745,16 @@ function FormBuilder({ setFormLink }) {
                                 placeholder="Description"
                               />
 
-                              {console.log(field)}
                               {getFieldRepr(field, index)}
+
+                              {(field.type === "control_dropdown" ||
+                                field.type === "control_checkbox" ||
+                                field.type === "control_radio") && (
+                                <Field
+                                  component={multiChoiceInputComponent}
+                                  name={`formElements[${index}].options`}
+                                />
+                              )}
                               <Field
                                 as={FieldRequiredCheckboxComponent}
                                 name={`formElements[${index}].required`}
