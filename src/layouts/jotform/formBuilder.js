@@ -697,7 +697,12 @@ function FormBuilder({ setFormLink }) {
                       </Drawer>
                       <Box
                         component="main"
-                        style={{ minHeight: "522px", backgroundColor: "lightblue" }}
+                        style={{
+                          maxHeight: "600px",
+                          overflow: "auto",
+                          minHeight: "522px",
+                          backgroundColor: "lightblue",
+                        }}
                         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
                       >
                         <Toolbar />
