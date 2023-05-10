@@ -36,6 +36,8 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import GestureIcon from "@mui/icons-material/Gesture";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import CakeIcon from "@mui/icons-material/Cake";
+import HelpCenterIcon from "@mui/icons-material/HelpCenter";
 
 import InputBase from "@mui/material/InputBase";
 import Rating from "@mui/material/Rating";
@@ -53,6 +55,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Modal from "@mui/material/Modal";
 import multiChoiceInputComponent from "./multiChoiceInputComponent";
+import martialStatusInputComponent from "./martialStatusInputComponent";
 
 const useStyles = makeStyles({
   input: {
@@ -201,6 +204,30 @@ function ElementList(push) {
       )}
       {generateElement(
         push,
+        "control_address",
+        "control_address",
+        "Type a question",
+        "Address",
+        <RoomIcon />
+      )}
+      {generateElement(
+        push,
+        "control_martial",
+        "control_radio",
+        "Marital Status",
+        "Marital Status",
+        <HelpCenterIcon />
+      )}
+      {generateElement(
+        push,
+        "control_birthday",
+        "control_datetime",
+        "Birth Date",
+        "Birth Date",
+        <CakeIcon />
+      )}
+      {generateElement(
+        push,
         "control_scale",
         "control_scale",
         "Type a question",
@@ -225,22 +252,6 @@ function ElementList(push) {
       )}
       {generateElement(
         push,
-        "control_address",
-        "control_address",
-        "Type a question",
-        "Address",
-        <RoomIcon />
-      )}
-      {generateElement(
-        push,
-        "control_number",
-        "control_number",
-        "Type a question",
-        "Number",
-        <Looks3Icon />
-      )}
-      {generateElement(
-        push,
         "control_dropdown",
         "control_dropdown",
         "Type a question",
@@ -262,6 +273,14 @@ function ElementList(push) {
         "Type a question",
         "Checkbox",
         <CheckBoxIcon />
+      )}
+      {generateElement(
+        push,
+        "control_number",
+        "control_number",
+        "Type a question",
+        "Number",
+        <Looks3Icon />
       )}
       {generateElement(
         push,
@@ -352,6 +371,20 @@ function getFieldRepr(field, index) {
         <Grid container spacing={2} style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <StyledRating name="Star rating" value={3} size="large" />
+          </Grid>
+        </Grid>
+      );
+    case "control_martial":
+      return null;
+    case "control_birthday":
+      return (
+        <Grid container mt={-5} style={{ padding: "0" }}>
+          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
+            <img
+              src="https://assets.uigarage.net/content/uploads/2019/06/image.png"
+              alt=""
+              style={{ width: "100%", height: "100%" }}
+            />
           </Grid>
         </Grid>
       );
@@ -517,7 +550,6 @@ function FormBuilder({ setFormLink }) {
     setSubmitting(true);
     // Call Django view to create new form using Jotform API
     const data = JSON.parse(JSON.stringify(values));
-    console.log(data);
     data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     axios
@@ -641,7 +673,6 @@ function FormBuilder({ setFormLink }) {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ values, setValues, isSubmitting }) => (
           <Form onKeyDown={handleKeyDown}>
-            {console.log(values, isSubmitting)}
             <div style={{ textAlign: "center" }}>
               <Field
                 as={NameInputComponent}
@@ -754,12 +785,20 @@ function FormBuilder({ setFormLink }) {
 
                               {(field.type === "control_dropdown" ||
                                 field.type === "control_checkbox" ||
-                                field.type === "control_radio") && (
+                                field.identifier === "control_radio") && (
                                 <Field
                                   component={multiChoiceInputComponent}
                                   name={`formElements[${index}].options`}
                                 />
                               )}
+
+                              {field.identifier === "control_martial" && (
+                                <Field
+                                  component={martialStatusInputComponent}
+                                  name={`formElements[${index}].options`}
+                                />
+                              )}
+
                               <Field
                                 as={FieldRequiredCheckboxComponent}
                                 name={`formElements[${index}].required`}

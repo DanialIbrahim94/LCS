@@ -520,7 +520,6 @@ function FormEditor({ initialValues }) {
                               placeholder="Description"
                             />
 
-                            {console.log(field)}
                             {getFieldRepr(field, index)}
                             <Field
                               as={FieldRequiredCheckboxComponent}
