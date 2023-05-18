@@ -1,0 +1,32 @@
+.popup-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.modal h3 {
+  /* Add your custom styles for the heading */
+  margin-bottom: 20px;
+}
+
+.modal .content {
+  margin: 15px auto;
+}
+
+.modal .content FormControl {
+  width: 220px;
+  margin-right: 10px;
+}
+
+.modal .content Button {
+  margin-top: 5px;
+}
+
+.modal small {
+  /* Add your custom styles for the small text */
+}
+
+.modal small a {
+  /* Add your custom styles for the anchor tag */
+}

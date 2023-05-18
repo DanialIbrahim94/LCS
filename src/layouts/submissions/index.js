@@ -12,11 +12,24 @@ import DataTable from "examples/Tables/DataTable";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 
+import InputLabel from "@mui/material/InputLabel";
+import Input from "@mui/material/Input";
+import FormControl from "@mui/material/FormControl";
+import SendIcon from "@mui/icons-material/Send";
+import CircularProgress from "@mui/material/CircularProgress";
+import AddIcon from "@mui/icons-material/Add";
+import Popup from "reactjs-popup";
+import "./index.css";
+
 function Submissions() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [submissions, setSubmissions] = useState(null);
+  const [requestedLeadsCount, setRequestedLeadsCount] = useState();
   const [leadsCount, setLeadsCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [showRequestLeads, setShowRequestLeads] = useState(false);
   const [totalLeadsCount, setTotalLeadsCount] = useState(0);
+  const [maxReaquestedLeadsCount, setMaxReaquestedLeadsCount] = useState(0);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
@@ -89,8 +102,11 @@ function Submissions() {
         setSubmissions(res.data.submissions);
         const subs = res.data.submissions;
         if (subs && subs.length > 0) initSubmissionsTableData(subs);
-        setLeadsCount(res.data.leads_count || 0);
-        setTotalLeadsCount(res.data.total_leads_count || 0);
+        const count = res.data.leads_count || 0;
+        const total = res.data.total_leads_count || 0;
+        setLeadsCount(count);
+        setTotalLeadsCount(total);
+        setMaxReaquestedLeadsCount(total - count);
       })
       .catch((err) => {
         console.log(err);
@@ -121,6 +137,60 @@ function Submissions() {
           message: err.message,
           placement: "bottomRight",
         });
+      });
+  };
+
+  const handleRequestedLeadsCountChange = (e) => {
+    const newRequestedLeadsCount = e.target.value;
+    if (
+      !newRequestedLeadsCount ||
+      (newRequestedLeadsCount > 0 && newRequestedLeadsCount <= maxReaquestedLeadsCount)
+    )
+      setRequestedLeadsCount(newRequestedLeadsCount);
+  };
+
+  const handleRequestLeads = () => {
+    if (loading) {
+      notification.warning({
+        message: "Your order is being processed. Please wait.",
+        placement: "bottomRight",
+      });
+      return;
+    }
+    setLoading(true);
+
+    if (!requestedLeadsCount) {
+      notification.error({
+        message: "Enter a valid number!",
+        placement: "bottomRight",
+      });
+      return;
+    }
+
+    axios
+      .post("leads/order/", { quantity: parseInt(requestedLeadsCount, 10), user_id: userinfo.id })
+      .then((res) => {
+        const paymentURL = res.data.payment_url;
+        console.log(paymentURL);
+        window.open(paymentURL, "_blank");
+
+        notification.success({
+          message: "Successfully requested more leads!",
+          placement: "bottomRight",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        notification.error({
+          message: err.response.data.message || "Failed to request more leads!",
+          placement: "bottomRight",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+        setRequestedLeadsCount(0);
+        setShowRequestLeads(false);
+        initSubmissions();
       });
   };
 
@@ -216,6 +286,99 @@ function Submissions() {
             </Card>
           </Grid>
         </Grid>
+
+        {userinfo && userinfo.jotform_id && (
+          <MDBox
+            width="100%"
+            m={2}
+            px={2}
+            display="flex"
+            justifyContent="flex-end"
+            sx={{ borderRadius: "16px" }}
+          >
+            <Popup
+              open={showRequestLeads}
+              trigger={
+                <Button variant="contained" startIcon={<AddIcon color="white" />}>
+                  <MDTypography variant="caption" fontSize="20px" color="white" fontWeight="medium">
+                    Purchase Additional Leads
+                  </MDTypography>
+                </Button>
+              }
+              modal
+              nested
+            >
+              {() => (
+                <div className="modal" style={{ textAlign: "center", padding: "20px" }}>
+                  <div>
+                    <h3>Buy More Leads</h3>
+                  </div>
+
+                  <div className="content" style={{ margin: "15px auto" }}>
+                    <MDBox>
+                      <FormControl style={{ width: "220px", marginRight: "10px" }}>
+                        <InputLabel id="request-coupons-label">
+                          Amount <small>(max {maxReaquestedLeadsCount})</small>
+                        </InputLabel>
+                        <Input
+                          type="number"
+                          name="requestedLeadsCount"
+                          min={1}
+                          max={totalLeadsCount}
+                          value={requestedLeadsCount}
+                          onChange={handleRequestedLeadsCountChange}
+                        />
+                      </FormControl>
+
+                      <Button
+                        variant="contained"
+                        endIcon={
+                          loading ? (
+                            <CircularProgress size={16} color="white" />
+                          ) : (
+                            <SendIcon color="white" />
+                          )
+                        }
+                        mx="10px"
+                        onClick={handleRequestLeads}
+                      >
+                        <MDTypography
+                          variant="caption"
+                          color="white"
+                          fontWeight="medium"
+                          sx={{ fontSize: "15px" }}
+                        >
+                          Request
+                        </MDTypography>
+                      </Button>
+                    </MDBox>
+                  </div>
+
+                  <div style={{ marginTop: "20px" }}>
+                    <small>
+                      <MDTypography
+                        variant="body2"
+                        color="black"
+                        fontWeight="small"
+                        sx={{ fontSize: "11px" }}
+                      >
+                        <span style={{ color: "red" }}>
+                          <b>NOTE</b>
+                        </span>
+                        : THERE ARE NO REFUNDS OR RETURNS ONCE A COUPON CODE HAS BEEN ISSUED. DO NOT
+                        PROCEED if you don&apos;t understand, or click on CONTACT US on
+                        <a href="https://datacapturepro.com/contact">
+                          {" "}
+                          https://datacapturepro.com/contact
+                        </a>
+                      </MDTypography>
+                    </small>
+                  </div>
+                </div>
+              )}
+            </Popup>
+          </MDBox>
+        )}
       </MDBox>
     </DashboardLayout>
   );
