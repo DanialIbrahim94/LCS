@@ -287,7 +287,7 @@ function Submissions() {
           </Grid>
         </Grid>
 
-        {userinfo && userinfo.jotform_id && totalLeadsCount > 0 && (
+        {userinfo && userinfo.jotform_id && totalLeadsCount > 0 && leadsCount < totalLeadsCount && (
           <MDBox
             width="100%"
             m={2}
