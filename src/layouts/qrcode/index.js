@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import MDTypography from "components/MDTypography";
 import IconButton from "@mui/material/IconButton";
 import QRCode from "qrcode.react";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Snackbar from "@mui/material/Snackbar";
@@ -98,7 +99,12 @@ function QRcode() {
                     </MDBox>
                   </MDBox>
                 ) : (
-                  <h1>No form was found</h1>
+                  <MDBox style={{ textAlign: "center" }} mt={4}>
+                    <MDTypography gutterBottom fontWeight="medium" component="div">
+                      Nothing to see in here
+                    </MDTypography>
+                    <SentimentDissatisfiedIcon fontSize="large" />
+                  </MDBox>
                 )}
               </MDBox>
             </Card>

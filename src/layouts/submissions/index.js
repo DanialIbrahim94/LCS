@@ -167,7 +167,7 @@ function Submissions() {
               </MDBox>
               <MDBox mx={4} py={3}>
                 <MDBox pt={3}>
-                  {submissions && submissions.length === 0 && (
+                  {(submissions === null || (submissions && submissions.length === 0)) && (
                     <MDBox style={{ textAlign: "center" }} mb={-5}>
                       <MDTypography gutterBottom fontWeight="medium" component="div">
                         Nothing to see in here
