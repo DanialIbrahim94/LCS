@@ -6,6 +6,7 @@ import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
 import { notification } from "antd";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import Grid from "@mui/material/Grid";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -381,7 +382,7 @@ function getFieldRepr(field, index) {
         <Grid container mt={-5} style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <img
-              src="https://assets.uigarage.net/content/uploads/2019/06/image.png"
+              src="https://raw.githubusercontent.com/HandyOrg/HandyOrgResource/master/HandyControl/Doc/extend_controls/DateTimePicker_2.png"
               alt=""
               style={{ width: "100%", height: "100%" }}
             />
@@ -407,7 +408,7 @@ function getFieldRepr(field, index) {
         <Grid container mt={-5} style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <img
-              src="https://assets.uigarage.net/content/uploads/2019/06/image.png"
+              src="https://raw.githubusercontent.com/HandyOrg/HandyOrgResource/master/HandyControl/Doc/extend_controls/DateTimePicker_2.png"
               alt=""
               style={{ width: "100%", height: "100%" }}
             />
@@ -509,7 +510,7 @@ function getFieldRepr(field, index) {
   }
 }
 
-function FormBuilder({ setFormLink }) {
+function FormBuilder({ setEditorView }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
   const [openChild, setOpenChild] = useState(false);
@@ -541,6 +542,9 @@ function FormBuilder({ setFormLink }) {
     boxShadow: 24,
     paddingTop: "20px",
   };
+
+  const navigate = useNavigate();
+
   const updateUserInfo = (formId) => {
     userinfo.jotform_id = formId;
     sessionStorage.setItem("userData", JSON.stringify(userinfo));
@@ -560,7 +564,7 @@ function FormBuilder({ setFormLink }) {
           message: res.data.message,
           placement: "bottomRight",
         });
-        setFormLink(res.data.form_url);
+        navigate("/");
       })
       .catch((err) => {
         notification.error({
@@ -834,7 +838,7 @@ function FormBuilder({ setFormLink }) {
 }
 
 FormBuilder.propTypes = {
-  setFormLink: PropTypes.func.isRequired,
+  setEditorView: PropTypes.func.isRequired,
 };
 
 export default FormBuilder;

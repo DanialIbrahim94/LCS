@@ -5,6 +5,9 @@ import Business from "layouts/business";
 import Roles from "layouts/roles";
 import History from "layouts/history";
 import Jotform from "layouts/jotform";
+import Overview from "layouts/overview";
+import Submissions from "layouts/submissions";
+import QRCode from "layouts/qrcode";
 import Profile from "layouts/profile";
 import CouponSend from "layouts/coupons/couponSend";
 import NewAccount from "layouts/profile/NewAccount";
@@ -21,6 +24,15 @@ const Role = {
 };
 
 const routes = [
+  {
+    type: "collapse",
+    name: "Dashboard",
+    key: "",
+    role: Role.AdminBsManager,
+    icon: <Icon fontSize="small">home</Icon>,
+    route: "/",
+    component: <Overview />,
+  },
   {
     type: "collapse",
     name: "User Management",
@@ -74,6 +86,24 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/jotform",
     component: <Jotform />,
+  },
+  {
+    type: "collapse",
+    name: "Submissions",
+    key: "submissions",
+    role: Role.AdminBsManager,
+    icon: <Icon fontSize="small">storage</Icon>,
+    route: "/submissions",
+    component: <Submissions />,
+  },
+  {
+    type: "collapse",
+    name: "QR Code",
+    key: "qrcode",
+    role: Role.AdminBsManager,
+    icon: <Icon fontSize="small">qr_code</Icon>,
+    route: "/qrcode",
+    component: <QRCode />,
   },
   {
     type: "collapse",

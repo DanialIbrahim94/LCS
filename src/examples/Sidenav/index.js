@@ -78,13 +78,15 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   const renderRoutes = (
     <List>
-      <NavLink key={routes[0].key} to={routes[0].route}>
-        <SidenavCollapse
-          name={routes[0].name}
-          icon={routes[0].icon}
-          active={routes[0].key === collapseName}
-        />
-      </NavLink>
+      {userinfo && userinfo.role.id === Role.AdminBsManager && (
+        <NavLink key={routes[0].key} to={routes[0].route}>
+          <SidenavCollapse
+            name={routes[0].name}
+            icon={routes[0].icon}
+            active={routes[0].key === collapseName}
+          />
+        </NavLink>
+      )}
       <NavLink key={routes[1].key} to={routes[1].route}>
         <SidenavCollapse
           name={routes[1].name}
@@ -92,16 +94,14 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           active={routes[1].key === collapseName}
         />
       </NavLink>
+      <NavLink key={routes[2].key} to={routes[2].route}>
+        <SidenavCollapse
+          name={routes[2].name}
+          icon={routes[2].icon}
+          active={routes[2].key === collapseName}
+        />
+      </NavLink>
       {userinfo && userinfo.role.id === Role.Admin && (
-        <NavLink key={routes[2].key} to={routes[2].route}>
-          <SidenavCollapse
-            name={routes[2].name}
-            icon={routes[2].icon}
-            active={routes[2].key === collapseName}
-          />
-        </NavLink>
-      )}
-      {userinfo && userinfo.role.id !== Role.AdminBsUser && (
         <NavLink key={routes[3].key} to={routes[3].route}>
           <SidenavCollapse
             name={routes[3].name}
@@ -110,7 +110,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      {userinfo && userinfo.role.id === Role.Admin && (
+      {userinfo && userinfo.role.id !== Role.AdminBsUser && (
         <NavLink key={routes[4].key} to={routes[4].route}>
           <SidenavCollapse
             name={routes[4].name}
@@ -119,7 +119,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      {userinfo && userinfo.role.id === Role.AdminBsManager && (
+      {userinfo && userinfo.role.id === Role.Admin && (
         <NavLink key={routes[5].key} to={routes[5].route}>
           <SidenavCollapse
             name={routes[5].name}
@@ -128,11 +128,38 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      <NavLink key={routes[6].key} to={routes[6].route}>
+      {userinfo && userinfo.role.id === Role.AdminBsManager && (
+        <NavLink key={routes[6].key} to={routes[6].route}>
+          <SidenavCollapse
+            name={routes[6].name}
+            icon={routes[6].icon}
+            active={routes[6].key === collapseName}
+          />
+        </NavLink>
+      )}
+      {userinfo && userinfo.role.id === Role.AdminBsManager && (
+        <NavLink key={routes[7].key} to={routes[7].route}>
+          <SidenavCollapse
+            name={routes[7].name}
+            icon={routes[7].icon}
+            active={routes[7].key === collapseName}
+          />
+        </NavLink>
+      )}
+      {userinfo && userinfo.role.id === Role.AdminBsManager && (
+        <NavLink key={routes[8].key} to={routes[8].route}>
+          <SidenavCollapse
+            name={routes[8].name}
+            icon={routes[8].icon}
+            active={routes[8].key === collapseName}
+          />
+        </NavLink>
+      )}
+      <NavLink key={routes[9].key} to={routes[9].route}>
         <SidenavCollapse
-          name={routes[6].name}
-          icon={routes[6].icon}
-          active={routes[6].key === collapseName}
+          name={routes[9].name}
+          icon={routes[9].icon}
+          active={routes[9].key === collapseName}
         />
       </NavLink>
     </List>

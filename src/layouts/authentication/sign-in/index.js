@@ -38,7 +38,8 @@ function Basic() {
               placement: "bottomRight",
             });
             sessionStorage.setItem("userData", JSON.stringify(res.data.data));
-            navigate("/tables");
+            const role = res.data.data.role.id;
+            navigate(role === 2 ? "/" : "/tables");
           })
           .catch((error) => {
             let reason = "";
