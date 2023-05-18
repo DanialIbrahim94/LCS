@@ -63,7 +63,7 @@ function Coupons() {
   const getBusinessUsers = () => {
     const filter = {
       /* eslint-disable */
-      role: 3, //Business User
+      role: 2, //Business Manager
     };
     axios
       .post(`users/list/`, filter)

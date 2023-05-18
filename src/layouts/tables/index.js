@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { notification } from "antd";
+import { CSVLink } from "react-csv";
+import axios from "utils/axios";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
@@ -14,13 +19,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { CSVLink } from "react-csv";
-import axios from "utils/axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { notification } from "antd";
-import "reactjs-popup/dist/index.css";
 import CouponsRecharge from "layouts/tables/CouponsRecharge";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import WarningIcon from "@mui/icons-material/Warning";
+import "reactjs-popup/dist/index.css";
 
 function Tables() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
@@ -30,6 +35,8 @@ function Tables() {
   const [bsIdx, setBSIdx] = useState();
   const [mailUsers, setMailUsers] = useState([]);
   const [msgtext, setMsgtext] = useState("");
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(false);
   const navigate = useNavigate();
   const [downCount, setDownCount] = useState(0);
   const [total, setTotal] = useState(0);
@@ -55,7 +62,7 @@ function Tables() {
     { Header: "phone", accessor: "phone", align: "center" },
     { Header: "address", accessor: "address", align: "left" },
     { Header: "birthday", accessor: "birthday", align: "center" },
-    { Header: "action", accessor: "action", align: "center" },
+    { Header: "actions", accessor: "actions", align: "center" },
   ];
 
   const showTableData = (array) => {
@@ -127,7 +134,7 @@ function Tables() {
             {item.birthday}
           </MDTypography>
         ),
-        action:
+        actions:
           userinfo.role.id == 3 ? (
             <MDTypography
               component="a"
@@ -139,15 +146,31 @@ function Tables() {
               Send
             </MDTypography>
           ) : (
-            <MDTypography
-              component="a"
-              href={`/profile/${item.id}`}
-              variant="caption"
-              color="text"
-              fontWeight="medium"
-            >
-              Edit
-            </MDTypography>
+            <>
+              <MDTypography
+                component="a"
+                href={`/profile/${item.id}`}
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+                mr={2}
+              >
+                Edit
+              </MDTypography>
+              <MDTypography
+                component="a"
+                href="#"
+                onClick={() => {
+                  setSelectedUser({ id: item.id, email: item.email });
+                  setDeleteVisible(true);
+                }}
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+              >
+                Delete
+              </MDTypography>
+            </>
           ),
       };
     });
@@ -173,7 +196,7 @@ function Tables() {
     axios
       .post(`/users/list/`, sendData)
       .then((res) => {
-        setUsers(res.data.data.filter(user => user.role.id != 4));
+        setUsers(res.data.data.filter((user) => user.role.id != 4));
         showTableData(res.data.data);
       })
       .catch((err) => console.log(err));
@@ -317,6 +340,27 @@ function Tables() {
       .catch((err) => console.log(err));
   };
 
+  const handleUserDelete = () => {
+    axios
+      .delete(`users/${selectedUser.id}`)
+      .then(() => {
+        notification.success({
+          message: "Successfully to delete.",
+          placement: "bottomRight",
+        });
+        getUsersData();
+      })
+      .catch(() => {
+        notification.error({
+          message: "Fail to delete.",
+          placement: "bottomRight",
+        });
+      })
+      .finally(() => {
+        setDeleteVisible(false);
+      });
+  };
+
   useEffect(() => {
     getUsersData();
     getBusinessList();
@@ -400,7 +444,7 @@ function Tables() {
                       variant="outlined"
                       startIcon={<AddIcon color="white" />}
                       sx={{ marginRight: "10px" }}
-                      onClick={event =>  window.location.href='/user/add'}
+                      onClick={(event) => (window.location.href = "/user/add")}
                     >
                       <MDTypography
                         component="a"
@@ -490,7 +534,7 @@ function Tables() {
                 {users && (
                   <Autocomplete
                     options={users}
-                    getOptionLabel={(option) => option.fullName + ': ' + option.email}
+                    getOptionLabel={(option) => option.fullName + ": " + option.email}
                     id="disable-close-on-select"
                     disableCloseOnSelect
                     multiple
@@ -530,6 +574,36 @@ function Tables() {
         )}
         <CouponsRecharge updateCoupons={getCouponCount} />
       </MDBox>
+
+      <Dialog
+        open={deleteVisible}
+        onClose={() => {
+          setDeleteVisible(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title" display="flex" alignItems="center">
+          <WarningIcon sx={{ marginRight: "10px", color: "orange" }} />
+          User Deletion Alert
+        </DialogTitle>
+        <DialogContent>
+          This action will permanently delete the user "<strong>{selectedUser.email}</strong>" from the system. Are
+          you sure you want to proceed with user deletion?
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setDeleteVisible(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleUserDelete} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </DashboardLayout>
   );
 }
