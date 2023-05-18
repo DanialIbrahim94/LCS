@@ -40,7 +40,7 @@ function Overview() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userinfo || userinfo.role.id !== 2) navigate("/tables");
+    if (!userinfo || userinfo.role.id !== 2) navigate("/authentication/sign-in");
   }, []);
 
   return (
