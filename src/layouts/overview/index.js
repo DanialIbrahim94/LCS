@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -36,6 +36,13 @@ const StyledGuideBox = styled(Box)(({ theme }) => ({
 }));
 
 function Overview() {
+  const userinfo = JSON.parse(sessionStorage.getItem("userData"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userinfo || userinfo.role.id !== 2) navigate("/tables");
+  }, []);
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
