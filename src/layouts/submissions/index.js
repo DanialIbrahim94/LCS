@@ -15,6 +15,8 @@ import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied
 function Submissions() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [submissions, setSubmissions] = useState(null);
+  const [leadsCount, setLeadsCount] = useState(0);
+  const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
@@ -85,8 +87,10 @@ function Submissions() {
       .get(`/jotform/${userinfo.id}/submissions/`)
       .then((res) => {
         setSubmissions(res.data.submissions);
-        if (res.data.submissions && res.data.submissions.length > 0)
-          initSubmissionsTableData(res.data.submissions);
+        const subs = res.data.submissions;
+        if (subs && subs.length > 0) initSubmissionsTableData(subs);
+        setLeadsCount(res.data.leads_count || 0);
+        setTotalLeadsCount(res.data.total_leads_count || 0);
       })
       .catch((err) => {
         console.log(err);
@@ -147,7 +151,13 @@ function Submissions() {
                 <MDTypography variant="h3" color="white">
                   Submissions
                 </MDTypography>
-                {submissions && submissions.length !== 0 && (
+                {userinfo && userinfo.jotform_id && (
+                  <MDTypography variant="h4" color="white">
+                    Leads owned: <span style={{ color: "white" }}>{leadsCount} </span>\
+                    <span style={{ color: "lime", fontSize: "30px" }}> {totalLeadsCount}</span>
+                  </MDTypography>
+                )}
+                {submissions && leadsCount > 0 ? (
                   <Button
                     variant="outlined"
                     startIcon={<CloudDownloadIcon color="white" />}
@@ -163,11 +173,28 @@ function Submissions() {
                       Download
                     </MDTypography>
                   </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    startIcon={<CloudDownloadIcon color="white" />}
+                    onClick={downloadSubmissions}
+                    mx="10px"
+                    disabled
+                  >
+                    <MDTypography
+                      variant="caption"
+                      color="white"
+                      fontWeight="medium"
+                      sx={{ fontSize: "15px" }}
+                    >
+                      Download
+                    </MDTypography>
+                  </Button>
                 )}
               </MDBox>
               <MDBox mx={4} py={3}>
                 <MDBox pt={3}>
-                  {(submissions === null || (submissions && submissions.length === 0)) && (
+                  {(submissions === null || (submissions && leadsCount === 0)) && (
                     <MDBox style={{ textAlign: "center" }} mb={-5}>
                       <MDTypography gutterBottom fontWeight="medium" component="div">
                         Nothing to see in here
