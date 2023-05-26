@@ -14,6 +14,7 @@ function Jotform() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [editorView, setEditorView] = useState(false);
   const [initialWelcomePage, setInitialWelcomePage] = useState({});
+  const [initialVerificationCode, setInitialVerificationCode] = useState(false);
   const [initialValues, setInitialValues] = useState({
     formName: "Form Name",
     formElements: [],
@@ -35,6 +36,8 @@ function Jotform() {
           const { type } = question;
           const { text } = question;
           const required = question.required === "Yes";
+          if (question.verificationCode && question.verificationCode === "Yes")
+            setInitialVerificationCode(question.verificationCode);
 
           formElements.push({ identifier, type, text, required });
         });
@@ -95,6 +98,7 @@ function Jotform() {
               >
                 {editorView ? (
                   <FormEditor
+                    initialVerificationCode={initialVerificationCode}
                     initialWelcomePage={initialWelcomePage}
                     initialValues={initialValues}
                   />

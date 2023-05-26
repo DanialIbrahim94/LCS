@@ -53,6 +53,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Switch from "@mui/material/Switch";
 import Modal from "@mui/material/Modal";
 import multiChoiceInputComponent from "./multiChoiceInputComponent";
 import martialStatusInputComponent from "./martialStatusInputComponent";
@@ -310,7 +311,7 @@ function ElementList(push) {
   );
 }
 
-function getFieldRepr(field, index) {
+function getFieldRepr(field, index, showVerificationButton) {
   switch (field.identifier) {
     case "control_fullname":
       return (
@@ -350,8 +351,28 @@ function getFieldRepr(field, index) {
     case "control_email":
       return (
         <Grid container spacing={2} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Email" variant="outlined" style={{ width: "100%" }} disabled />
+          <Grid item xs={12} style={{ display: "flex", paddingTop: "0" }}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              style={showVerificationButton ? { width: "70%" } : { width: "100%" }}
+              disabled
+            />
+            {showVerificationButton && (
+              <Button
+                style={{
+                  backgroundColor: "gray",
+                  width: "29%",
+                  height: "100%",
+                  marginLeft: "auto",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+                disabled
+              >
+                Send Verification Code
+              </Button>
+            )}
           </Grid>
         </Grid>
       );
@@ -509,10 +530,11 @@ function getFieldRepr(field, index) {
   }
 }
 
-function FormEditor({ initialValues, initialWelcomePage }) {
+function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
   const [openChild, setOpenChild] = useState(false);
+  const [verificationCode, setVerificationCode] = useState(false);
   const [welcomePage, setWelcomePage] = useState(initialWelcomePage);
   const modalStyle = {
     position: "absolute",
@@ -537,6 +559,7 @@ function FormEditor({ initialValues, initialWelcomePage }) {
     const data = JSON.parse(JSON.stringify(values));
     data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
+    data.verificationCode = verificationCode;
     axios
       .put(`/jotform/${userinfo.id}/update/`, data)
       .then((res) => {
@@ -573,6 +596,10 @@ function FormEditor({ initialValues, initialWelcomePage }) {
   useEffect(() => {
     setWelcomePage(initialWelcomePage);
   }, [initialWelcomePage]);
+
+  useEffect(() => {
+    setVerificationCode(initialVerificationCode);
+  }, [initialVerificationCode]);
 
   return (
     <>
@@ -771,7 +798,7 @@ function FormEditor({ initialValues, initialWelcomePage }) {
                                 placeholder="Description"
                               />
 
-                              {getFieldRepr(field, index)}
+                              {getFieldRepr(field, index, verificationCode)}
 
                               {(field.type === "control_dropdown" ||
                                 field.type === "control_checkbox" ||
@@ -787,6 +814,35 @@ function FormEditor({ initialValues, initialWelcomePage }) {
                                   component={martialStatusInputComponent}
                                   name={`formElements[${index}].options`}
                                 />
+                              )}
+
+                              {field.identifier === "control_email" && (
+                                <Grid
+                                  item
+                                  xs={12}
+                                  style={{
+                                    textAlign: "right",
+                                    paddingRight: "15px",
+                                    paddingTop: "7px",
+                                    float: "right",
+                                  }}
+                                >
+                                  <FormControlLabel
+                                    control={
+                                      <Switch
+                                        checked={verificationCode}
+                                        onChange={(e) => {
+                                          setVerificationCode(e.target.checked);
+                                        }}
+                                        inputProps={{ "aria-label": "controlled" }}
+                                        style={{ padding: "6px" }}
+                                        size="small"
+                                      />
+                                    }
+                                    label="Use verification code"
+                                    labelPlacement="start"
+                                  />
+                                </Grid>
                               )}
 
                               <Field
@@ -826,6 +882,7 @@ function FormEditor({ initialValues, initialWelcomePage }) {
 FormEditor.propTypes = {
   initialValues: PropTypes.func.isRequired,
   initialWelcomePage: PropTypes.func.isRequired,
+  initialVerificationCode: PropTypes.func.isRequired,
 };
 
 export default FormEditor;

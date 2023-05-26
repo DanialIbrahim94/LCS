@@ -818,6 +818,7 @@ function FormBuilder({ setEditorView }) {
                                   name={`formElements[${index}].options`}
                                 />
                               )}
+
                               {field.identifier === "control_email" && (
                                 <Grid
                                   item
