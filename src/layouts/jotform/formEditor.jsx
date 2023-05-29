@@ -52,6 +52,10 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import Switch from "@mui/material/Switch";
 import Modal from "@mui/material/Modal";
@@ -437,22 +441,21 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_address":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField
-              label="Street Address"
-              variant="outlined"
-              style={{ width: "100%" }}
-              disabled
-            />
-          </Grid>
-          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField
-              label="Street Address Line 2"
-              variant="outlined"
-              style={{ width: "100%" }}
-              disabled
-            />
+        <Grid container spacing={1} style={{ padding: "0" }}>
+          <Grid item xs={12} style={{ textAlign: "left", paddingTop: "7px" }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Country</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value="Afghanistan"
+                label="country"
+                style={{ height: "45px" }}
+                disabled
+              >
+                <MenuItem value="Afghanistan">Afghanistan</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
             <TextField label="City" variant="outlined" style={{ width: "100%" }} disabled />
@@ -460,14 +463,6 @@ function getFieldRepr(field, index, showVerificationButton) {
           <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
             <TextField
               label="State / Province"
-              variant="outlined"
-              style={{ width: "100%" }}
-              disabled
-            />
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField
-              label="Postal / Zip Code"
               variant="outlined"
               style={{ width: "100%" }}
               disabled
