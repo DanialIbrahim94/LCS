@@ -606,7 +606,11 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
           marginBottom: "8px",
         }}
       >
-        --------------<Button onClick={() => setOpen(true)}>EDIT WELCOME PAGE</Button>--------------
+        --------------
+        <Button onClick={() => setOpen(true)}>
+          The business name and logo should appear here{" "}
+        </Button>
+        --------------
       </div>
       <Modal
         open={open}

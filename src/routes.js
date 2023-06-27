@@ -80,11 +80,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Jotform",
-    key: "jotform",
+    name: "Merchant Form",
+    key: "merchant-form",
     role: Role.AdminBsManager,
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/jotform",
+    route: "/merchant-form",
     component: <Jotform />,
   },
   {

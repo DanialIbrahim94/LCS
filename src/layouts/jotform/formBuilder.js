@@ -454,7 +454,7 @@ function getFieldRepr(field, index, showVerificationButton) {
                 style={{ height: "45px" }}
                 disabled
               >
-                <MenuItem value="Afghanistan">Afghanistan</MenuItem>
+                <MenuItem value="united-states">The United States</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -532,8 +532,9 @@ function FormBuilder({ setEditorView }) {
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(false);
   const [welcomePage, setWelcomePage] = useState({
-    title: "Welcome",
-    subTitle: "Hi there, please fill out and submit this form.",
+    title: "Get Access To A FREE $100 Hotel Saver Gift",
+    subTitle:
+      "Hi there, please fill out and submit this form. You will be sent the gift through email, once you submit.",
     buttonText: "Start",
     logo: "",
     isActive: "1",
@@ -616,7 +617,9 @@ function FormBuilder({ setEditorView }) {
           marginBottom: "8px",
         }}
       >
-        --------------<Button onClick={() => setOpen(true)}>EDIT WELCOME PAGE</Button>--------------
+        --------------
+        <Button onClick={() => setOpen(true)}>The business name and logo should appear here</Button>
+        --------------
       </div>
       <Modal
         open={open}
