@@ -31,8 +31,11 @@ function Submissions() {
   const [showRequestLeads, setShowRequestLeads] = useState(false);
   const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [maxReaquestedLeadsCount, setMaxReaquestedLeadsCount] = useState(0);
+  const [minReaquestedLeadsCount, setMinReaquestedLeadsCount] = useState(0);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
+
+  const minRequestedLeads = 50;
 
   const capitalize = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : "");
 
@@ -109,8 +112,11 @@ function Submissions() {
         if (subs && subs.length > 0) initSubmissionsTableData(subs);
         const count = res.data.leads_count || 0;
         const total = res.data.total_leads_count || 0;
+        const min = total - count > minRequestedLeads ? minRequestedLeads : total - count;
         setLeadsCount(count);
         setTotalLeadsCount(total);
+        setRequestedLeadsCount(min);
+        setMinReaquestedLeadsCount(min);
         setMaxReaquestedLeadsCount(total - count);
       })
       .catch((err) => {
@@ -149,7 +155,8 @@ function Submissions() {
     const newRequestedLeadsCount = e.target.value;
     if (
       !newRequestedLeadsCount ||
-      (newRequestedLeadsCount > 0 && newRequestedLeadsCount <= maxReaquestedLeadsCount)
+      (newRequestedLeadsCount >= minReaquestedLeadsCount &&
+        newRequestedLeadsCount <= maxReaquestedLeadsCount)
     )
       setRequestedLeadsCount(newRequestedLeadsCount);
   };
@@ -323,12 +330,15 @@ function Submissions() {
                     <MDBox>
                       <FormControl style={{ width: "220px", marginRight: "10px" }}>
                         <InputLabel id="request-coupons-label">
-                          Amount <small>(max {maxReaquestedLeadsCount})</small>
+                          Amount{" "}
+                          <small>
+                            (min {minReaquestedLeadsCount} / max {maxReaquestedLeadsCount})
+                          </small>
                         </InputLabel>
                         <Input
                           type="number"
                           name="requestedLeadsCount"
-                          min={1}
+                          min={0}
                           max={totalLeadsCount}
                           value={requestedLeadsCount}
                           onChange={handleRequestedLeadsCountChange}
@@ -353,7 +363,7 @@ function Submissions() {
                           fontWeight="medium"
                           sx={{ fontSize: "15px" }}
                         >
-                          Request
+                          download leads
                         </MDTypography>
                       </Button>
                     </MDBox>
