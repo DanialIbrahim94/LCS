@@ -19,6 +19,7 @@ import SendIcon from "@mui/icons-material/Send";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "reactjs-popup";
+import OrdersTable from "./ordersTable";
 import "./index.css";
 
 function Submissions() {
@@ -43,6 +44,10 @@ function Submissions() {
     });
 
     return questions;
+  };
+
+  const updateLeads = () => {
+    initSubmissions();
   };
 
   const initSubmissionsTableData = (subs) => {
@@ -368,7 +373,6 @@ function Submissions() {
                         : THERE ARE NO REFUNDS OR RETURNS ONCE A COUPON CODE HAS BEEN ISSUED. DO NOT
                         PROCEED if you don&apos;t understand, or click on CONTACT US on
                         <a href="https://datacapturepro.com/contact">
-                          {" "}
                           https://datacapturepro.com/contact
                         </a>
                       </MDTypography>
@@ -379,6 +383,13 @@ function Submissions() {
             </Popup>
           </MDBox>
         )}
+
+        <OrdersTable
+          updateLeads={updateLeads}
+          showOrders={
+            userinfo && userinfo.jotform_id && totalLeadsCount > 0 && leadsCount < totalLeadsCount
+          }
+        />
       </MDBox>
     </DashboardLayout>
   );
