@@ -380,8 +380,8 @@ function Submissions() {
                         <span style={{ color: "red" }}>
                           <b>NOTE</b>
                         </span>
-                        : THERE ARE NO REFUNDS OR RETURNS ONCE A COUPON CODE HAS BEEN ISSUED. DO NOT
-                        PROCEED if you don&apos;t understand, or click on CONTACT US on
+                        : THERE ARE NO REFUNDS OR RETURNS ONCE A LEAD HAS BEEN ISSUED. DO NOT
+                        PROCEED if you don&apos;t understand, or click on CONTACT US on{" "}
                         <a href="https://datacapturepro.com/contact">
                           https://datacapturepro.com/contact
                         </a>

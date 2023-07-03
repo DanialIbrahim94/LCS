@@ -48,7 +48,7 @@ function Overview() {
       <DashboardNavbar />
       <Box py={6}>
         <Typography variant="h4" align="center" mb={7} gutterBottom>
-          Welcome to Your Dashboard
+          Welcome To Your Private Dashboard!
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12} md={6} lg={4}>
@@ -93,7 +93,7 @@ function Overview() {
             <StyledCard>
               <CardContent>
                 <Typography variant="h6" component="h2" gutterBottom>
-                  Generate QR code
+                  PREVIEW FORM
                 </Typography>
                 <Typography variant="body1" color="textSecondary" mt={2}>
                   Generate a QR code for easy sharing and scanning of your form.
@@ -111,25 +111,22 @@ function Overview() {
           <Grid item xs={12}>
             <StyledGuideBox>
               <Typography variant="h5" align="left" mb={4} gutterBottom>
-                Getting Started Guide
+                Welcome To Your Private Dashboard!
               </Typography>
               <Typography variant="body1" align="left">
-                Welcome to getcustomerdata.com, a Lead Capture System (LCS) where you can leverage
-                the power of Jotform to create custom forms and capture valuable data from your
-                clients. With getCustomerData, you have full control over managing and optimizing
-                your form submissions. Let&apos;s get started:
-                <ol style={{ marginLeft: "35px" }}>
-                  <li>Create or edit a form to collect data from your users.</li>
-                  <li>View the submissions received from your forms.</li>
-                  <li>Generate a QR code for easy sharing and scanning.</li>
-                  <li>Explore additional features and settings.</li>
-                </ol>
+                You can now utilize this interface to create a customized form to provide your $100
+                Hotel Savings Gift to your customers. To begin, click on the “Create/Edit Form”
+                option below and you will be redirected to a form builder to create your customized
+                form.
+              </Typography>
+              <Typography variant="body1" align="left" style={{ marginTop: "10px" }}>
+                After the form is complete, you can access your form by clicking on “Preview Form”.
+                We will be providing you a design with YOUR custom QR code which can easily be
+                printed onto an easel or banner to display in your store.
               </Typography>
               <Typography variant="body2" align="left" mt={5}>
                 We&apos;re here to support you every step of the way. If you need any assistance or
-                have questions, our dedicated support team is ready to help. Get ready to maximize
-                the value of your captured data with getCustomerData. Start capturing, managing, and
-                gaining insights from your form submissions today!
+                have questions, our dedicated support team is ready to help.
               </Typography>
             </StyledGuideBox>
           </Grid>
