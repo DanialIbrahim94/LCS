@@ -61,7 +61,7 @@ function Overview() {
                   Click here to create or edit a form to collect data from your users.
                 </Typography>
                 <Box mt={4}>
-                  <Link to="/jotform">
+                  <Link to="/merchant-form">
                     <StyledButton variant="contained" fullWidth size="large">
                       CREATE/EDIT FORM
                     </StyledButton>

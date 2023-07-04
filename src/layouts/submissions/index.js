@@ -55,7 +55,7 @@ function Submissions() {
     console.log(subs);
     let cols = [
       { Header: "No", accessor: "no", width: "5%", align: "left" },
-      { Header: "Submission Date", accessor: "submissionDate", width: "20%", align: "left" },
+      { Header: "1-Submission Date", accessor: "submissionDate", width: "20%", align: "left" },
     ];
     const questions = getQuestions(subs);
     const newCols = questions
@@ -267,7 +267,7 @@ function Submissions() {
               </MDBox>
               <MDBox mx={4} py={3}>
                 <MDBox pt={3}>
-                  {(submissions === null || (submissions && leadsCount === 0)) && (
+                  {(submissions === null || totalLeadsCount === 0) && (
                     <MDBox style={{ textAlign: "center" }} mb={-5}>
                       <MDTypography gutterBottom fontWeight="medium" component="div">
                         Nothing to see in here
@@ -290,7 +290,7 @@ function Submissions() {
           </Grid>
         </Grid>
 
-        {userinfo && userinfo.jotform_id && totalLeadsCount > 0 && leadsCount < totalLeadsCount && (
+        {userinfo && userinfo.jotform_id && totalLeadsCount > 0 && (
           <MDBox
             width="100%"
             m={2}
@@ -383,9 +383,7 @@ function Submissions() {
 
         <OrdersTable
           updateLeads={updateLeads}
-          showOrders={
-            userinfo && userinfo.jotform_id && totalLeadsCount > 0 && leadsCount < totalLeadsCount
-          }
+          showOrders={userinfo && userinfo.jotform_id && totalLeadsCount > 0}
         />
       </MDBox>
     </DashboardLayout>
