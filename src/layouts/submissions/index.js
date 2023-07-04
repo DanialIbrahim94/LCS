@@ -30,8 +30,6 @@ function Submissions() {
   const [loading, setLoading] = useState(false);
   const [showRequestLeads, setShowRequestLeads] = useState(false);
   const [totalLeadsCount, setTotalLeadsCount] = useState(0);
-  const [maxReaquestedLeadsCount, setMaxReaquestedLeadsCount] = useState(0);
-  const [minReaquestedLeadsCount, setMinReaquestedLeadsCount] = useState(0);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
@@ -112,12 +110,9 @@ function Submissions() {
         if (subs && subs.length > 0) initSubmissionsTableData(subs);
         const count = res.data.leads_count || 0;
         const total = res.data.total_leads_count || 0;
-        const min = total - count > minRequestedLeads ? minRequestedLeads : total - count;
         setLeadsCount(count);
         setTotalLeadsCount(total);
-        setRequestedLeadsCount(min);
-        setMinReaquestedLeadsCount(min);
-        setMaxReaquestedLeadsCount(total - count);
+        setRequestedLeadsCount(minRequestedLeads);
       })
       .catch((err) => {
         console.log(err);
@@ -153,11 +148,7 @@ function Submissions() {
 
   const handleRequestedLeadsCountChange = (e) => {
     const newRequestedLeadsCount = e.target.value;
-    if (
-      !newRequestedLeadsCount ||
-      (newRequestedLeadsCount >= minReaquestedLeadsCount &&
-        newRequestedLeadsCount <= maxReaquestedLeadsCount)
-    )
+    if (!newRequestedLeadsCount || newRequestedLeadsCount >= minRequestedLeads)
       setRequestedLeadsCount(newRequestedLeadsCount);
   };
 
@@ -330,16 +321,12 @@ function Submissions() {
                     <MDBox>
                       <FormControl style={{ width: "220px", marginRight: "10px" }}>
                         <InputLabel id="request-coupons-label">
-                          Amount{" "}
-                          <small>
-                            (min {minReaquestedLeadsCount} / max {maxReaquestedLeadsCount})
-                          </small>
+                          Amount <small> / min {minRequestedLeads}</small>
                         </InputLabel>
                         <Input
                           type="number"
                           name="requestedLeadsCount"
-                          min={0}
-                          max={totalLeadsCount}
+                          min={minRequestedLeads}
                           value={requestedLeadsCount}
                           onChange={handleRequestedLeadsCountChange}
                         />
