@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  backgroundColor: "#00bcd4", // Blue cyan color
+  backgroundColor: "#099FFF", // Blue cyan color
   color: theme.palette.primary.contrastText,
   borderRadius: theme.spacing(2),
   boxShadow: theme.shadows[3],
@@ -47,20 +47,41 @@ function Overview() {
     <DashboardLayout>
       <DashboardNavbar />
       <Box py={6}>
-        <Typography variant="h4" align="center" mb={7} gutterBottom>
+        <Typography variant="h4" align="center" mb={6} gutterBottom>
           Welcome To Your Private Dashboard!
         </Typography>
         <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} md={6} lg={4}>
-            <StyledCard>
-              <CardContent>
-                <Typography variant="h6" component="h2" gutterBottom>
+          <Grid item xs={12} mb={4}>
+            <StyledGuideBox>
+              <Typography variant="body1" align="left">
+                You can now utilize this interface to create a customized form to provide your $100
+                Hotel Savings Gift to your customers.
+              </Typography>
+              <Typography variant="body1" align="left">
+                To begin, click on the “Create/Edit Form” option below and you will be redirected to
+                a form builder to create your customized form.
+              </Typography>
+              <Typography variant="body1" align="left">
+                After the form is complete, you can access your form by clicking on “Preview Form”.
+                We will be providing you a design with YOUR custom QR code which can easily be
+                printed onto an easel or banner to display in your store.
+              </Typography>
+              <Typography variant="body2" align="left" mt={3}>
+                We&apos;re here to support you every step of the way. If you need any assistance or
+                have questions, our dedicated support team is ready to help.
+              </Typography>
+            </StyledGuideBox>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4} style={{ display: "flex" }}>
+            <StyledCard style={{ flexGrow: 1 }}>
+              <CardContent style={{ display: "contents" }}>
+                <Typography variant="h6" component="h2" gutterBottom px="20px" pt="10px">
                   Create/Edit Form
                 </Typography>
-                <Typography variant="body1" color="textSecondary" mt={2}>
+                <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
                   Click here to create or edit a form to collect data from your users.
                 </Typography>
-                <Box mt={4}>
+                <Box mt="auto" pt="0" px="20px" pb="20px">
                   <Link to="/merchant-form">
                     <StyledButton variant="contained" fullWidth size="large">
                       CREATE/EDIT FORM
@@ -70,16 +91,16 @@ function Overview() {
               </CardContent>
             </StyledCard>
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <StyledCard>
-              <CardContent>
-                <Typography variant="h6" component="h2" gutterBottom>
+          <Grid item xs={12} md={6} lg={4} style={{ display: "flex" }}>
+            <StyledCard style={{ flexGrow: 1 }}>
+              <CardContent style={{ display: "contents" }}>
+                <Typography variant="h6" component="h2" gutterBottom px="20px" pt="10px">
                   View Submissions
                 </Typography>
-                <Typography variant="body1" color="textSecondary" mt={2}>
+                <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
                   View the submissions received from your forms.
                 </Typography>
-                <Box mt={4}>
+                <Box mt="auto" pt="0" px="20px" pb="20px">
                   <Link to="/submissions">
                     <StyledButton variant="contained" fullWidth size="large">
                       View Submissions
@@ -89,46 +110,24 @@ function Overview() {
               </CardContent>
             </StyledCard>
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <StyledCard>
-              <CardContent>
-                <Typography variant="h6" component="h2" gutterBottom>
-                  PREVIEW FORM
+          <Grid item xs={12} md={6} lg={4} style={{ display: "flex" }}>
+            <StyledCard style={{ flexGrow: 1 }}>
+              <CardContent style={{ display: "contents" }}>
+                <Typography variant="h6" component="h2" gutterBottom px="20px" pt="10px">
+                  Peview Form
                 </Typography>
-                <Typography variant="body1" color="textSecondary" mt={2}>
+                <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
                   Generate a QR code for easy sharing and scanning of your form.
                 </Typography>
-                <Box mt={4}>
+                <Box mt="auto" pt="0" px="20px" pb="20px">
                   <Link to="/qrcode">
                     <StyledButton variant="contained" fullWidth size="large">
-                      Generate QR Code
+                      PREVIEW FORM
                     </StyledButton>
                   </Link>
                 </Box>
               </CardContent>
             </StyledCard>
-          </Grid>
-          <Grid item xs={12}>
-            <StyledGuideBox>
-              <Typography variant="h5" align="left" mb={4} gutterBottom>
-                Welcome To Your Private Dashboard!
-              </Typography>
-              <Typography variant="body1" align="left">
-                You can now utilize this interface to create a customized form to provide your $100
-                Hotel Savings Gift to your customers. To begin, click on the “Create/Edit Form”
-                option below and you will be redirected to a form builder to create your customized
-                form.
-              </Typography>
-              <Typography variant="body1" align="left" style={{ marginTop: "10px" }}>
-                After the form is complete, you can access your form by clicking on “Preview Form”.
-                We will be providing you a design with YOUR custom QR code which can easily be
-                printed onto an easel or banner to display in your store.
-              </Typography>
-              <Typography variant="body2" align="left" mt={5}>
-                We&apos;re here to support you every step of the way. If you need any assistance or
-                have questions, our dedicated support team is ready to help.
-              </Typography>
-            </StyledGuideBox>
           </Grid>
         </Grid>
       </Box>

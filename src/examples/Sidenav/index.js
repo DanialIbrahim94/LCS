@@ -87,20 +87,24 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      <NavLink key={routes[1].key} to={routes[1].route}>
-        <SidenavCollapse
-          name={routes[1].name}
-          icon={routes[1].icon}
-          active={routes[1].key === collapseName}
-        />
-      </NavLink>
-      <NavLink key={routes[2].key} to={routes[2].route}>
-        <SidenavCollapse
-          name={routes[2].name}
-          icon={routes[2].icon}
-          active={routes[2].key === collapseName}
-        />
-      </NavLink>
+      {userinfo && userinfo.role.id !== Role.AdminBsManager && (
+        <NavLink key={routes[1].key} to={routes[1].route}>
+          <SidenavCollapse
+            name={routes[1].name}
+            icon={routes[1].icon}
+            active={routes[1].key === collapseName}
+          />
+        </NavLink>
+      )}
+      {userinfo && userinfo.role.id !== Role.AdminBsManager && (
+        <NavLink key={routes[2].key} to={routes[2].route}>
+          <SidenavCollapse
+            name={routes[2].name}
+            icon={routes[2].icon}
+            active={routes[2].key === collapseName}
+          />
+        </NavLink>
+      )}
       {userinfo && userinfo.role.id === Role.Admin && (
         <NavLink key={routes[3].key} to={routes[3].route}>
           <SidenavCollapse
@@ -110,15 +114,17 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         </NavLink>
       )}
-      {userinfo && userinfo.role.id !== Role.AdminBsUser && (
-        <NavLink key={routes[4].key} to={routes[4].route}>
-          <SidenavCollapse
-            name={routes[4].name}
-            icon={routes[4].icon}
-            active={routes[4].key === collapseName}
-          />
-        </NavLink>
-      )}
+      {userinfo &&
+        userinfo.role.id !== Role.AdminBsUser &&
+        userinfo.role.id !== Role.AdminBsManager && (
+          <NavLink key={routes[4].key} to={routes[4].route}>
+            <SidenavCollapse
+              name={routes[4].name}
+              icon={routes[4].icon}
+              active={routes[4].key === collapseName}
+            />
+          </NavLink>
+        )}
       {userinfo && userinfo.role.id === Role.Admin && (
         <NavLink key={routes[5].key} to={routes[5].route}>
           <SidenavCollapse
