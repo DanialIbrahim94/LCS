@@ -52,27 +52,21 @@ function QRcode() {
                 sx={{ display: "flex", justifyContent: "space-between" }}
               >
                 <MDTypography variant="h3" color="white">
-                  QR Code
+                  Share Your Form
                 </MDTypography>
               </MDBox>
               <MDBox mx={4} py={3}>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {formLink ? (
-                  <MDBox style={{ textAlign: "center" }}>
-                    <MDTypography gutterBottom variant="h5" component="div">
-                      To access your form, Scan this QR code:
+                  <MDBox>
+                    <MDTypography variant="h4">
+                      To make it easier for your clients to access the form, you have two options:
                     </MDTypography>
 
-                    <QRCode
-                      value={formLink}
-                      level="H"
-                      includeMargin="true"
-                      renderAs="canvas"
-                      size={200}
-                    />
-                    <MDTypography variant="h5" component="div" style={{ marginTop: "20px" }}>
-                      Or use this link:
+                    <MDTypography variant="h5" component="div" mt={3}>
+                      - Share the link:
                     </MDTypography>
+                    <p>You can copy the following link and share it directly with your clients:</p>
                     <MDBox alignItems="center">
                       <a
                         href={formLink}
@@ -95,6 +89,25 @@ function QRcode() {
                         autoHideDuration={3000}
                         onClose={handleCloseSnackbar}
                         message="Copied!"
+                      />
+                    </MDBox>
+
+                    <MDTypography gutterBottom variant="h5" component="div" mt={4}>
+                      - Scan the QR code:
+                    </MDTypography>
+                    <p>
+                      Alternatively, your clients can scan the QR code provided below using a QR
+                      code scanner on their smartphones. This will automatically redirect them to
+                      the form.
+                    </p>
+
+                    <MDBox style={{ textAlign: "center" }}>
+                      <QRCode
+                        value={formLink}
+                        level="H"
+                        includeMargin="true"
+                        renderAs="canvas"
+                        size={300}
                       />
                     </MDBox>
                   </MDBox>

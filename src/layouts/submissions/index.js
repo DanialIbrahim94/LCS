@@ -226,7 +226,7 @@ function Submissions() {
                 </MDTypography>
                 {userinfo && userinfo.jotform_id && (
                   <MDTypography variant="h4" color="white">
-                    Leads owned: <span style={{ color: "white" }}>{leadsCount} </span>\
+                    Acquired leads: <span style={{ color: "white" }}>{leadsCount} </span>\
                     <span style={{ color: "lime", fontSize: "30px" }}> {totalLeadsCount}</span>
                   </MDTypography>
                 )}

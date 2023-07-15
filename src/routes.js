@@ -98,7 +98,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "QR Code",
+    name: "Form Sharing",
     key: "qrcode",
     role: Role.AdminBsManager,
     icon: <Icon fontSize="small">qr_code</Icon>,
