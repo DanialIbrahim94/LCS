@@ -12,28 +12,15 @@ import DataTable from "examples/Tables/DataTable";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 
-import InputLabel from "@mui/material/InputLabel";
-import Input from "@mui/material/Input";
-import FormControl from "@mui/material/FormControl";
-import SendIcon from "@mui/icons-material/Send";
-import CircularProgress from "@mui/material/CircularProgress";
-import AddIcon from "@mui/icons-material/Add";
-import Popup from "reactjs-popup";
-import OrdersTable from "./ordersTable";
 import "./index.css";
 
 function Submissions() {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [submissions, setSubmissions] = useState(null);
-  const [requestedLeadsCount, setRequestedLeadsCount] = useState();
   const [leadsCount, setLeadsCount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [showRequestLeads, setShowRequestLeads] = useState(false);
   const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
-
-  const minRequestedLeads = 50;
 
   const capitalize = (str) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : "");
 
@@ -45,10 +32,6 @@ function Submissions() {
     });
 
     return questions;
-  };
-
-  const updateLeads = () => {
-    initSubmissions();
   };
 
   const initSubmissionsTableData = (subs) => {
@@ -112,7 +95,6 @@ function Submissions() {
         const total = res.data.total_leads_count || 0;
         setLeadsCount(count);
         setTotalLeadsCount(total);
-        setRequestedLeadsCount(minRequestedLeads);
       })
       .catch((err) => {
         console.log(err);
@@ -143,57 +125,6 @@ function Submissions() {
           message: err.message,
           placement: "bottomRight",
         });
-      });
-  };
-
-  const handleRequestedLeadsCountChange = (e) => {
-    const newRequestedLeadsCount = e.target.value;
-    if (!newRequestedLeadsCount || newRequestedLeadsCount >= minRequestedLeads)
-      setRequestedLeadsCount(newRequestedLeadsCount);
-  };
-
-  const handleRequestLeads = () => {
-    if (loading) {
-      notification.warning({
-        message: "Your order is being processed. Please wait.",
-        placement: "bottomRight",
-      });
-      return;
-    }
-    setLoading(true);
-
-    if (!requestedLeadsCount) {
-      notification.error({
-        message: "Enter a valid number!",
-        placement: "bottomRight",
-      });
-      return;
-    }
-
-    axios
-      .post("leads/order/", { quantity: parseInt(requestedLeadsCount, 10), user_id: userinfo.id })
-      .then((res) => {
-        const paymentURL = res.data.payment_url;
-        console.log(paymentURL);
-        window.open(paymentURL, "_blank");
-
-        notification.success({
-          message: "Successfully requested more leads!",
-          placement: "bottomRight",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        notification.error({
-          message: err.response.data.message || "Failed to request more leads!",
-          placement: "bottomRight",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setRequestedLeadsCount(0);
-        setShowRequestLeads(false);
-        initSubmissions();
       });
   };
 
@@ -284,7 +215,6 @@ function Submissions() {
             </Card>
           </Grid>
         </Grid>
-
       </MDBox>
     </DashboardLayout>
   );
