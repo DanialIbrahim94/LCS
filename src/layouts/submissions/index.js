@@ -224,12 +224,7 @@ function Submissions() {
                 <MDTypography variant="h3" color="white">
                   Submissions
                 </MDTypography>
-                {userinfo && userinfo.jotform_id && (
-                  <MDTypography variant="h4" color="white">
-                    Acquired leads: <span style={{ color: "white" }}>{leadsCount} </span>\
-                    <span style={{ color: "lime", fontSize: "30px" }}> {totalLeadsCount}</span>
-                  </MDTypography>
-                )}
+
                 {submissions && leadsCount > 0 ? (
                   <Button
                     variant="outlined"
@@ -290,101 +285,6 @@ function Submissions() {
           </Grid>
         </Grid>
 
-        {userinfo && userinfo.jotform_id && totalLeadsCount > 0 && (
-          <MDBox
-            width="100%"
-            m={2}
-            px={2}
-            display="flex"
-            justifyContent="flex-end"
-            sx={{ borderRadius: "16px" }}
-          >
-            <Popup
-              open={showRequestLeads}
-              trigger={
-                <Button variant="contained" startIcon={<AddIcon color="white" />}>
-                  <MDTypography variant="caption" fontSize="20px" color="white" fontWeight="medium">
-                    Purchase Additional Leads
-                  </MDTypography>
-                </Button>
-              }
-              modal
-              nested
-            >
-              {() => (
-                <div className="modal" style={{ textAlign: "center", padding: "20px" }}>
-                  <div>
-                    <h3>Buy More Leads</h3>
-                  </div>
-
-                  <div className="content" style={{ margin: "15px auto" }}>
-                    <MDBox>
-                      <FormControl style={{ width: "220px", marginRight: "10px" }}>
-                        <InputLabel id="request-coupons-label">
-                          Amount <small> / min {minRequestedLeads}</small>
-                        </InputLabel>
-                        <Input
-                          type="number"
-                          name="requestedLeadsCount"
-                          min={minRequestedLeads}
-                          value={requestedLeadsCount}
-                          onChange={handleRequestedLeadsCountChange}
-                        />
-                      </FormControl>
-
-                      <Button
-                        variant="contained"
-                        endIcon={
-                          loading ? (
-                            <CircularProgress size={16} color="white" />
-                          ) : (
-                            <SendIcon color="white" />
-                          )
-                        }
-                        mx="10px"
-                        onClick={handleRequestLeads}
-                      >
-                        <MDTypography
-                          variant="caption"
-                          color="white"
-                          fontWeight="medium"
-                          sx={{ fontSize: "15px" }}
-                        >
-                          download leads
-                        </MDTypography>
-                      </Button>
-                    </MDBox>
-                  </div>
-
-                  <div style={{ marginTop: "20px" }}>
-                    <small>
-                      <MDTypography
-                        variant="body2"
-                        color="black"
-                        fontWeight="small"
-                        sx={{ fontSize: "11px" }}
-                      >
-                        <span style={{ color: "red" }}>
-                          <b>NOTE</b>
-                        </span>
-                        : THERE ARE NO REFUNDS OR RETURNS ONCE A LEAD HAS BEEN ISSUED. DO NOT
-                        PROCEED if you don&apos;t understand, or click on CONTACT US on{" "}
-                        <a href="https://datacapturepro.com/contact">
-                          https://datacapturepro.com/contact
-                        </a>
-                      </MDTypography>
-                    </small>
-                  </div>
-                </div>
-              )}
-            </Popup>
-          </MDBox>
-        )}
-
-        <OrdersTable
-          updateLeads={updateLeads}
-          showOrders={userinfo && userinfo.jotform_id && totalLeadsCount > 0}
-        />
       </MDBox>
     </DashboardLayout>
   );
