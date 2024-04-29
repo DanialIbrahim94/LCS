@@ -75,8 +75,8 @@ function Overview() {
           <Grid item xs={12} md={6} lg={4} style={{ display: "flex" }}>
             <StyledCard style={{ flexGrow: 1 }}>
               <CardContent style={{ display: "contents" }}>
-                <Typography variant="h6" component="h2" gutterBottom px="20px" pt="10px">
-                  Create/Edit Form
+                <Typography variant="h5" component="h2" gutterBottom px="20px" pt="10px">
+                  <span style={{ color: "white", fontWeight: "bolder" }}>Create/Edit Form</span>
                 </Typography>
                 <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
                   Click here to create or edit a form to collect data from your users.
@@ -94,8 +94,8 @@ function Overview() {
           <Grid item xs={12} md={6} lg={4} style={{ display: "flex" }}>
             <StyledCard style={{ flexGrow: 1 }}>
               <CardContent style={{ display: "contents" }}>
-                <Typography variant="h6" component="h2" gutterBottom px="20px" pt="10px">
-                  View Submissions
+                <Typography variant="h5" component="h2" gutterBottom px="20px" pt="10px">
+                  <span style={{ color: "white", fontWeight: "bolder" }}>View Submissions</span>
                 </Typography>
                 <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
                   View the submissions received from your forms.
@@ -113,8 +113,8 @@ function Overview() {
           <Grid item xs={12} md={6} lg={4} style={{ display: "flex" }}>
             <StyledCard style={{ flexGrow: 1 }}>
               <CardContent style={{ display: "contents" }}>
-                <Typography variant="h6" component="h2" gutterBottom px="20px" pt="10px">
-                  Peview Form
+                <Typography variant="h5" component="h2" gutterBottom px="20px" pt="10px">
+                  <span style={{ color: "white", fontWeight: "bolder" }}>Peview Form</span>
                 </Typography>
                 <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
                   Generate a QR code for easy sharing and scanning of your form.

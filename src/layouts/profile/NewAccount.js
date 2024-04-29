@@ -180,7 +180,7 @@ function ProfileInfoCard() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
-              <MDInput type="text" label="Full Name" name="fullName" variant="standard" fullWidth />
+              <MDInput type="text" label="Business Contact Full Name" name="fullName" variant="standard" fullWidth />
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="email" label="Email" name="email" variant="standard" fullWidth />
@@ -213,13 +213,13 @@ function ProfileInfoCard() {
               </Grid>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="Address (Optional)" name="address" variant="standard" fullWidth />
+              <MDInput type="text" label="City State Zip Country" name="address" variant="standard" fullWidth />
             </MDBox>
             {userinfo.role.id !== 3 && (
               <MDBox>
                 <MDBox mb={2}>
                   <FormControl fullWidth size="large">
-                    <InputLabel id="demo-select-small">Business</InputLabel>
+                    <InputLabel id="demo-select-small">Business Name</InputLabel>
                     <Select
                       labelId="demo-select-small"
                       id="demo-select-small"

@@ -14,6 +14,7 @@ import MDBox from "components/MDBox";
 import Button from "@mui/material/Button";
 import MDTypography from "components/MDTypography";
 import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -172,11 +173,29 @@ function ElementList(push) {
         push,
         "control_fullname",
         "control_fullname",
-        "Type a question",
+        "Full Name",
         "Full Name",
         <AccountBoxIcon />
       )}
+      {generateElement(push, "control_email", "control_email", "Email", "Email", <EmailIcon />)}
+      {generateElement(push, "control_phone", "control_phone", "Phone", "Phone", <PhoneIcon />)}
       {generateElement(
+        push,
+        "control_birthday",
+        "control_datetime",
+        "Birth Date",
+        "Birth Date",
+        <CakeIcon />
+      )}
+      {generateElement(
+        push,
+        "control_address",
+        "control_address",
+        "Country",
+        "Address",
+        <RoomIcon />
+      )}
+      {/* {generateElement(
         push,
         "control_textbox",
         "control_textbox",
@@ -192,31 +211,7 @@ function ElementList(push) {
         "Text Area",
         <NotesIcon />
       )}
-      {generateElement(
-        push,
-        "control_email",
-        "control_email",
-        "Type a question",
-        "Email",
-        <EmailIcon />
-      )}
-      {generateElement(
-        push,
-        "control_phone",
-        "control_phone",
-        "Type a question",
-        "Phone",
-        <PhoneIcon />
-      )}
-      {generateElement(
-        push,
-        "control_address",
-        "control_address",
-        "Type a question",
-        "Address",
-        <RoomIcon />
-      )}
-      {generateElement(
+      {/* {generateElement(
         push,
         "control_martial",
         "control_radio",
@@ -224,15 +219,7 @@ function ElementList(push) {
         "Marital Status",
         <HelpCenterIcon />
       )}
-      {generateElement(
-        push,
-        "control_birthday",
-        "control_datetime",
-        "Birth Date",
-        "Birth Date",
-        <CakeIcon />
-      )}
-      {generateElement(
+      {/* {generateElement(
         push,
         "control_scale",
         "control_scale",
@@ -311,7 +298,7 @@ function ElementList(push) {
         "Type a question",
         "Captcha",
         <SmartToyIcon />
-      )}
+      )} */}
     </List>
   );
 }
@@ -320,18 +307,19 @@ function getFieldRepr(field, index, showVerificationButton) {
   switch (field.identifier) {
     case "control_fullname":
       return (
-        <Grid container spacing={2}>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="First Name" variant="outlined" style={{ width: "100%" }} disabled />
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Last Name" variant="outlined" style={{ width: "100%" }} disabled />
+        <Grid container>
+          <Grid item xs={12}>
+            <label htmlFor="first-name">
+              {field.text}
+              <input type="text" id="first-name" disabled style={{ marginLeft: "40px" }} />
+              <input type="text" id="last-name" disabled style={{ marginLeft: "20px" }} />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_textbox":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField label="Last Name" variant="outlined" style={{ width: "100%" }} disabled />
           </Grid>
@@ -339,7 +327,7 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_textarea":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField
               label="Long text.."
@@ -355,14 +343,17 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_email":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ display: "flex", paddingTop: "0" }}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              style={showVerificationButton ? { width: "70%" } : { width: "100%" }}
-              disabled
-            />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="email">
+              {field.text}
+              <input
+                id="email"
+                variant="outlined"
+                style={{ width: "auto", marginLeft: "40px" }}
+                disabled
+              />
+            </label>
             {showVerificationButton && (
               <Button
                 style={{
@@ -383,18 +374,24 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_phone":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
-          <Grid item xs={3} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Area Code" variant="outlined" style={{ width: "100%" }} disabled />
-          </Grid>
-          <Grid item xs={9} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Phone Number" variant="outlined" style={{ width: "100%" }} disabled />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="phone">
+              {field.text}
+              <input label="Area Code" variant="outlined" style={{ marginLeft: "40px" }} disabled />
+              <input
+                label="Phone Number"
+                variant="outlined"
+                style={{ marginLeft: "20px" }}
+                disabled
+              />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_scale":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <StyledRating name="Star rating" value={3} size="large" />
           </Grid>
@@ -404,19 +401,23 @@ function getFieldRepr(field, index, showVerificationButton) {
       return null;
     case "control_birthday":
       return (
-        <Grid container mt={-5} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
-            <img
-              src="https://raw.githubusercontent.com/HandyOrg/HandyOrgResource/master/HandyControl/Doc/extend_controls/DateTimePicker_2.png"
-              alt=""
-              style={{ width: "100%", height: "100%" }}
-            />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="birthday">
+              {field.text}
+              <input
+                type="date"
+                variant="outlined"
+                style={{ marginLeft: "40px", minWidth: "200px", textAlign: "center" }}
+                disabled
+              />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_time":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={4} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField label="Hour" variant="outlined" style={{ width: "100%" }} disabled />
           </Grid>
@@ -444,36 +445,21 @@ function getFieldRepr(field, index, showVerificationButton) {
       return (
         <Grid container spacing={1} style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "left", paddingTop: "7px" }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Country</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value="Afghanistan"
-                label="country"
-                style={{ height: "45px" }}
-                disabled
-              >
-                <MenuItem value="united-states">The United States</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField label="City" variant="outlined" style={{ width: "100%" }} disabled />
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField
-              label="State / Province"
-              variant="outlined"
-              style={{ width: "100%" }}
-              disabled
-            />
+            <label htmlFor="country">
+              {field.text}
+              <input type="text" id="country" disabled style={{ marginLeft: "57px" }} />
+            </label>
+            <br />
+            <label htmlFor="state">
+              State, City
+              <input type="text" id="state" disabled style={{ marginLeft: "40px" }} />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_number":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField
               label="e.g. 23"
@@ -532,9 +518,13 @@ function FormBuilder({ setEditorView }) {
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(false);
   const [welcomePage, setWelcomePage] = useState({
-    title: "Get Access To A FREE $100 Hotel Saver Gift",
-    subTitle:
-      "Hi there, please fill out and submit this form. You will be sent the gift through email, once you submit.",
+    title: "<b style='color: #4a98d2;'>The $100</b> Hotel Saver Gift",
+    subTitle: `You’re about to receive a $100 coupon that you can redeem and use at 1,000,000
+      worldwide hotels and resorts up to 2-years, once redeemed. There is nothing to join,
+      no blackout dates, no travel restrictions, and no timeshare presentations to attend.<br />
+      <b>NO GIMMICKS, JUST SAVINGS</b><br /><br />
+      <small>You will be emailed with instructions how to use this within 5-minutes once 
+      submitted</small>`,
     buttonText: "Start",
     logo: "",
     isActive: "1",
@@ -617,17 +607,7 @@ function FormBuilder({ setEditorView }) {
           marginBottom: "8px",
         }}
       >
-        --------------
-        <Button onClick={() => setOpen(true)}>The business name and logo should appear here</Button>
-        --------------
-      </div>
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
+        <Box>
           <MDBox>
             <Button onClick={() => setOpenChild(true)}>Click to add logo</Button>
             <Modal
@@ -657,55 +637,47 @@ function FormBuilder({ setEditorView }) {
                 <Button onClick={() => setOpenChild(false)}>Add Logo</Button>
               </Box>
             </Modal>
-
-            <InputBase
+            <p
               variant="standard"
               style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
               className={useStyles().input}
               id="welcomePageTitle"
               type="text"
               name="title"
-              value={welcomePage.title}
               onChange={handleChange}
+              dangerouslySetInnerHTML={{ __html: welcomePage.title }}
             />
           </MDBox>
           <MDBox>
-            <InputBase
+            <p
               variant="standard"
-              style={{ width: "100%", marginBottom: "20px" }}
+              style={{
+                width: "100%",
+                marginBottom: "20px",
+                fontWeight: "400",
+                textAlign: "center",
+              }}
               className={useStyles().input}
               id="welcomePageSubTitle"
               type="text"
               name="subTitle"
-              value={welcomePage.subTitle}
               onChange={handleChange}
-            />
-          </MDBox>
-          <MDBox>
-            <InputBase
-              variant="standard"
-              style={{ width: "100%", backgroundColor: "steelblue", color: "white" }}
-              className={useStyles().input}
-              id="welcomePageButtonText"
-              type="text"
-              name="buttonText"
-              value={welcomePage.buttonText}
-              onChange={handleChange}
+              dangerouslySetInnerHTML={{ __html: welcomePage.subTitle }}
             />
           </MDBox>
         </Box>
-      </Modal>
+      </div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ values, setValues, isSubmitting }) => (
           <Form onKeyDown={handleKeyDown}>
-            <div style={{ textAlign: "center" }}>
-              <Field
-                as={NameInputComponent}
-                name="formName"
-                id="formName"
-                defaultValue="Form Name"
-              />
-            </div>
+            {/* <div style={{ textAlign: "center" }}>
+               <Field
+                 as={NameInputComponent}
+                 name="formName"
+                 id="formName"
+                 defaultValue="Form Name"
+               />
+             </div> */}
             <div style={{ margin: "20px 0", minHeight: "550px" }}>
               <FieldArray name="formElements" id="formElements">
                 {({ push, remove }) => (
@@ -717,9 +689,12 @@ function FormBuilder({ setEditorView }) {
                     <Box sx={{ display: "flex" }}>
                       <CssBaseline />
                       <AppBar
-                        style={{ backgroundColor: "cadetblue" }}
+                        backgroundColor="info"
                         position="absolute"
-                        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        sx={{
+                          backgroundColor: "info.main",
+                          zIndex: (theme) => theme.zIndex.drawer + 1,
+                        }}
                       >
                         <Toolbar>
                           <Typography
@@ -757,7 +732,7 @@ function FormBuilder({ setEditorView }) {
                           maxHeight: "600px",
                           overflow: "auto",
                           minHeight: "522px",
-                          backgroundColor: "lightblue",
+                          backgroundColor: "lightgray",
                         }}
                         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
                       >
@@ -805,8 +780,16 @@ function FormBuilder({ setEditorView }) {
                                 name={`formElements[${index}].description`}
                                 placeholder="Description"
                               />
-
-                              {getFieldRepr(field, index, verificationCode)}
+                              <div
+                                style={{
+                                  padding: "20px",
+                                  margin: "0 0 10px 0",
+                                  backgroundColor: "lightgray",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                {getFieldRepr(field, index, verificationCode)}
+                              </div>
 
                               {(field.type === "control_dropdown" ||
                                 field.type === "control_checkbox" ||
@@ -828,21 +811,24 @@ function FormBuilder({ setEditorView }) {
                                     float: "right",
                                   }}
                                 >
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={verificationCode}
-                                        onChange={(e) => {
-                                          setVerificationCode(e.target.checked);
-                                        }}
-                                        inputProps={{ "aria-label": "controlled" }}
-                                        style={{ padding: "6px" }}
-                                        size="small"
-                                      />
-                                    }
-                                    label="Use verification code"
-                                    labelPlacement="start"
-                                  />
+                                  <Tooltip title="Only available on a card form">
+                                    <FormControlLabel
+                                      control={
+                                        <Switch
+                                          checked={verificationCode}
+                                          onChange={(e) => {
+                                            setVerificationCode(e.target.checked);
+                                          }}
+                                          inputProps={{ "aria-label": "controlled" }}
+                                          style={{ padding: "6px" }}
+                                          size="small"
+                                        />
+                                      }
+                                      label="Use verification code"
+                                      labelPlacement="start"
+                                      disabled
+                                    />
+                                  </Tooltip>
                                 </Grid>
                               )}
 

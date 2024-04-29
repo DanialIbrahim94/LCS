@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import Tooltip from "@mui/material/Tooltip";
 import MDBox from "components/MDBox";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -59,57 +60,88 @@ function QRcode() {
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {formLink ? (
                   <MDBox>
-                    <MDTypography variant="h4">
-                      To make it easier for your clients to access the form, you have two options:
-                    </MDTypography>
+                    <Grid container spacing={6}>
+                      <Grid item xs={6}>
+                        <MDTypography variant="h4">
+                          You have two options to market the promotion which will automatically
+                          redirect them to the form you just created.
+                        </MDTypography>
 
-                    <MDTypography variant="h5" component="div" mt={3}>
-                      - Share the link:
-                    </MDTypography>
-                    <p>You can copy the following link and share it directly with your clients:</p>
-                    <MDBox alignItems="center">
-                      <a
-                        href={formLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{ color: "darkblue" }}
-                      >
-                        {formLink}
-                      </a>
+                        <MDTypography variant="h5" component="div" mb={3} mt={5}>
+                          <span
+                            style={{
+                              border: "1px",
+                              borderRadius: "50%",
+                              borderStyle: "solid",
+                              padding: "5px 15px",
+                            }}
+                          >
+                            1
+                          </span>
+                        </MDTypography>
+                        <p>Use this link and share it with your customers/clients</p>
+                        <MDBox alignItems="center">
+                          <a
+                            href={formLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{ color: "darkblue" }}
+                          >
+                            {formLink}
+                          </a>
 
-                      <CopyToClipboard text={formLink} onCopy={handleCopy}>
-                        <IconButton sx={{ ml: 1 }} size="small">
-                          <FileCopyOutlinedIcon fontSize="small" />
-                        </IconButton>
-                      </CopyToClipboard>
+                          <CopyToClipboard text={formLink} onCopy={handleCopy}>
+                            <IconButton sx={{ ml: 1 }} size="small">
+                              <FileCopyOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </CopyToClipboard>
 
-                      <Snackbar
-                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                        open={openSnackbar}
-                        autoHideDuration={3000}
-                        onClose={handleCloseSnackbar}
-                        message="Copied!"
-                      />
-                    </MDBox>
+                          <Snackbar
+                            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                            open={openSnackbar}
+                            autoHideDuration={3000}
+                            onClose={handleCloseSnackbar}
+                            message="Copied!"
+                          />
+                        </MDBox>
+                      </Grid>
 
-                    <MDTypography gutterBottom variant="h5" component="div" mt={4}>
-                      - Scan the QR code:
-                    </MDTypography>
-                    <p>
-                      Alternatively, your clients can scan the QR code provided below using a QR
-                      code scanner on their smartphones. This will automatically redirect them to
-                      the form.
-                    </p>
+                      <Grid item xs={6}>
+                        <MDTypography gutterBottom variant="h5" component="div" mt={2} mb={3}>
+                          <span
+                            style={{
+                              border: "1px",
+                              borderRadius: "50%",
+                              borderStyle: "solid",
+                              padding: "5px 15px",
+                            }}
+                          >
+                            2
+                          </span>
+                        </MDTypography>
+                        <p>
+                          You can add this QR Code to any collateral such as a table-top display or
+                          to the back of your business cards.
+                        </p>
 
-                    <MDBox style={{ textAlign: "center" }}>
-                      <QRCode
-                        value={formLink}
-                        level="H"
-                        includeMargin="true"
-                        renderAs="canvas"
-                        size={300}
-                      />
-                    </MDBox>
+                        <MDBox style={{ textAlign: "center" }}>
+                          <Tooltip title="You can RIGHT CLICK and save this to your harddrive">
+                            <QRCode
+                              value={formLink}
+                              level="H"
+                              includeMargin="true"
+                              renderAs="canvas"
+                              size={300}
+                            />
+                          </Tooltip>
+                        </MDBox>
+
+                        <p>
+                          NOTE: Simply do a screenshot of YOUR unique QR Code and paste on your
+                          graphics.
+                        </p>
+                      </Grid>
+                    </Grid>
                   </MDBox>
                 ) : (
                   <MDBox style={{ textAlign: "center" }} mt={4}>

@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import MDTypography from "components/MDTypography";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -171,11 +172,29 @@ function ElementList(push) {
         push,
         "control_fullname",
         "control_fullname",
-        "Type a question",
+        "Full Name",
         "Full Name",
         <AccountBoxIcon />
       )}
+      {generateElement(push, "control_email", "control_email", "Email", "Email", <EmailIcon />)}
+      {generateElement(push, "control_phone", "control_phone", "Phone", "Phone", <PhoneIcon />)}
       {generateElement(
+        push,
+        "control_birthday",
+        "control_datetime",
+        "Birth Date",
+        "Birth Date",
+        <CakeIcon />
+      )}
+      {generateElement(
+        push,
+        "control_address",
+        "control_address",
+        "Country",
+        "Address",
+        <RoomIcon />
+      )}
+      {/* {generateElement(
         push,
         "control_textbox",
         "control_textbox",
@@ -191,31 +210,7 @@ function ElementList(push) {
         "Text Area",
         <NotesIcon />
       )}
-      {generateElement(
-        push,
-        "control_email",
-        "control_email",
-        "Type a question",
-        "Email",
-        <EmailIcon />
-      )}
-      {generateElement(
-        push,
-        "control_phone",
-        "control_phone",
-        "Type a question",
-        "Phone",
-        <PhoneIcon />
-      )}
-      {generateElement(
-        push,
-        "control_address",
-        "control_address",
-        "Type a question",
-        "Address",
-        <RoomIcon />
-      )}
-      {generateElement(
+      {/* {generateElement(
         push,
         "control_martial",
         "control_radio",
@@ -223,15 +218,7 @@ function ElementList(push) {
         "Marital Status",
         <HelpCenterIcon />
       )}
-      {generateElement(
-        push,
-        "control_birthday",
-        "control_datetime",
-        "Birth Date",
-        "Birth Date",
-        <CakeIcon />
-      )}
-      {generateElement(
+      {/* {generateElement(
         push,
         "control_scale",
         "control_scale",
@@ -310,7 +297,7 @@ function ElementList(push) {
         "Type a question",
         "Captcha",
         <SmartToyIcon />
-      )}
+      )} */}
     </List>
   );
 }
@@ -319,18 +306,19 @@ function getFieldRepr(field, index, showVerificationButton) {
   switch (field.identifier) {
     case "control_fullname":
       return (
-        <Grid container spacing={2}>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="First Name" variant="outlined" style={{ width: "100%" }} disabled />
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Last Name" variant="outlined" style={{ width: "100%" }} disabled />
+        <Grid container>
+          <Grid item xs={12}>
+            <label htmlFor="first-name">
+              {field.text}
+              <input type="text" id="first-name" disabled style={{ marginLeft: "40px" }} />
+              <input type="text" id="last-name" disabled style={{ marginLeft: "20px" }} />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_textbox":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField label="Last Name" variant="outlined" style={{ width: "100%" }} disabled />
           </Grid>
@@ -338,7 +326,7 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_textarea":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField
               label="Long text.."
@@ -354,14 +342,17 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_email":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ display: "flex", paddingTop: "0" }}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              style={showVerificationButton ? { width: "70%" } : { width: "100%" }}
-              disabled
-            />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="email">
+              {field.text}
+              <input
+                id="email"
+                variant="outlined"
+                style={{ width: "auto", marginLeft: "40px" }}
+                disabled
+              />
+            </label>
             {showVerificationButton && (
               <Button
                 style={{
@@ -382,18 +373,24 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_phone":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
-          <Grid item xs={3} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Area Code" variant="outlined" style={{ width: "100%" }} disabled />
-          </Grid>
-          <Grid item xs={9} style={{ textAlign: "center", paddingTop: "0" }}>
-            <TextField label="Phone Number" variant="outlined" style={{ width: "100%" }} disabled />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="phone">
+              {field.text}
+              <input label="Area Code" variant="outlined" style={{ marginLeft: "40px" }} disabled />
+              <input
+                label="Phone Number"
+                variant="outlined"
+                style={{ marginLeft: "20px" }}
+                disabled
+              />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_scale":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <StyledRating name="Star rating" value={3} size="large" />
           </Grid>
@@ -403,19 +400,23 @@ function getFieldRepr(field, index, showVerificationButton) {
       return null;
     case "control_birthday":
       return (
-        <Grid container mt={-5} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
-            <img
-              src="https://raw.githubusercontent.com/HandyOrg/HandyOrgResource/master/HandyControl/Doc/extend_controls/DateTimePicker_2.png"
-              alt=""
-              style={{ width: "100%", height: "100%" }}
-            />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="birthday">
+              {field.text}
+              <input
+                type="date"
+                variant="outlined"
+                style={{ marginLeft: "40px", minWidth: "200px", textAlign: "center" }}
+                disabled
+              />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_time":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={4} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField label="Hour" variant="outlined" style={{ width: "100%" }} disabled />
           </Grid>
@@ -443,36 +444,21 @@ function getFieldRepr(field, index, showVerificationButton) {
       return (
         <Grid container spacing={1} style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "left", paddingTop: "7px" }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Country</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value="Afghanistan"
-                label="country"
-                style={{ height: "45px" }}
-                disabled
-              >
-                <MenuItem value="Afghanistan">Afghanistan</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField label="City" variant="outlined" style={{ width: "100%" }} disabled />
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: "center", paddingTop: "7px" }}>
-            <TextField
-              label="State / Province"
-              variant="outlined"
-              style={{ width: "100%" }}
-              disabled
-            />
+            <label htmlFor="country">
+              {field.text}
+              <input type="text" id="country" disabled style={{ marginLeft: "57px" }} />
+            </label>
+            <br />
+            <label htmlFor="state">
+              State, City
+              <input type="text" id="state" disabled style={{ marginLeft: "40px" }} />
+            </label>
           </Grid>
         </Grid>
       );
     case "control_number":
       return (
-        <Grid container spacing={2} style={{ padding: "0" }}>
+        <Grid container style={{ padding: "0" }}>
           <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
             <TextField
               label="e.g. 23"
@@ -598,105 +584,73 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
 
   return (
     <>
-      <div
-        style={{
-          textAlign: "center",
-          fontWeight: "bold",
-          letterSpacing: "5px",
-          marginBottom: "8px",
-        }}
-      >
-        --------------
-        <Button onClick={() => setOpen(true)}>
-          The business name and logo should appear here{" "}
-        </Button>
-        --------------
-      </div>
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <MDBox>
-            <Button onClick={() => setOpenChild(true)}>Click to add/change logo</Button>
-            <Modal
-              open={openChild}
-              onClose={() => setOpenChild(false)}
-              aria-labelledby="child-modal-title"
-              aria-describedby="child-modal-description"
-            >
-              <Box sx={{ ...modalStyle, width: 500 }}>
-                <h2 id="child-modal-title">Add logo</h2>
-                <p
-                  id="child-modal-description"
-                  style={{ fontSize: "14px", margin: "10px 0 15px 0" }}
-                >
-                  Upload your image to an image hosting website (such as Imgur, Flickr, or Google
-                  Photos), copy the image URL, and paste it into the input field below.
-                </p>
-                <TextField
-                  variant="standard"
-                  // style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
-                  id="welcomePageLogo"
-                  type="text"
-                  name="logo"
-                  value={welcomePage.logo}
-                  onChange={handleChange}
-                />
-                <Button onClick={() => setOpenChild(false)}>Add/Change Logo</Button>
-              </Box>
-            </Modal>
+      <Box sx={modalStyle}>
+        <MDBox>
+          <Button onClick={() => setOpenChild(true)}>Click to add/change logo</Button>
+          <Modal
+            open={openChild}
+            onClose={() => setOpenChild(false)}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...modalStyle, width: 500 }}>
+              <h2 id="child-modal-title">Add logo</h2>
+              <p id="child-modal-description" style={{ fontSize: "14px", margin: "10px 0 15px 0" }}>
+                Upload your image to an image hosting website (such as Imgur, Flickr, or Google
+                Photos), copy the image URL, and paste it into the input field below.
+              </p>
+              <TextField
+                variant="standard"
+                // style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
+                id="welcomePageLogo"
+                type="text"
+                name="logo"
+                value={welcomePage.logo}
+                onChange={handleChange}
+              />
+              <Button onClick={() => setOpenChild(false)}>Add/Change Logo</Button>
+            </Box>
+          </Modal>
 
-            <InputBase
-              variant="standard"
-              style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
-              className={useStyles().input}
-              id="welcomePageTitle"
-              type="text"
-              name="title"
-              value={welcomePage.title}
-              onChange={handleChange}
-            />
-          </MDBox>
-          <MDBox>
-            <InputBase
-              variant="standard"
-              style={{ width: "100%", marginBottom: "20px" }}
-              className={useStyles().input}
-              id="welcomePageSubTitle"
-              type="text"
-              name="subTitle"
-              value={welcomePage.subTitle}
-              onChange={handleChange}
-            />
-          </MDBox>
-          <MDBox>
-            <InputBase
-              variant="standard"
-              style={{ width: "100%", backgroundColor: "steelblue", color: "white" }}
-              className={useStyles().input}
-              id="welcomePageButtonText"
-              type="text"
-              name="buttonText"
-              value={welcomePage.buttonText}
-              onChange={handleChange}
-            />
-          </MDBox>
-        </Box>
-      </Modal>
+          <InputBase
+            variant="standard"
+            style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
+            className={useStyles().input}
+            id="welcomePageTitle"
+            type="text"
+            name="title"
+            value={welcomePage.title}
+            onChange={handleChange}
+          />
+        </MDBox>
+        <MDBox>
+          <InputBase
+            variant="standard"
+            style={{ width: "100%", marginBottom: "20px" }}
+            className={useStyles().input}
+            id="welcomePageSubTitle"
+            type="text"
+            name="subTitle"
+            value={welcomePage.subTitle}
+            onChange={handleChange}
+          />
+        </MDBox>
+        <MDBox>
+          <InputBase
+            variant="standard"
+            style={{ width: "100%", backgroundColor: "steelblue", color: "white" }}
+            className={useStyles().input}
+            id="welcomePageButtonText"
+            type="text"
+            name="buttonText"
+            value={welcomePage.buttonText}
+            onChange={handleChange}
+          />
+        </MDBox>
+      </Box>
       <Formik initialValues={initialValues} onSubmit={onSubmit} enableReinitialize="true">
         {({ values, setValues, isSubmitting }) => (
           <Form onKeyDown={handleKeyDown}>
-            <div style={{ textAlign: "center" }}>
-              <Field
-                as={NameInputComponent}
-                name="formName"
-                id="formName"
-                defaultValue="Form Name"
-              />
-            </div>
             <div style={{ margin: "20px 0", minHeight: "550px" }}>
               <FieldArray name="formElements" id="formElements">
                 {({ push, remove }) => (
