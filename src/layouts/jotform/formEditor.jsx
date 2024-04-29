@@ -516,7 +516,19 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
   const [open, setOpen] = useState(false);
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(false);
-  const [welcomePage, setWelcomePage] = useState(initialWelcomePage);
+  const [welcomePage, setWelcomePage] = useState({
+    title: "<b style='color: #4a98d2;'>The $100</b> Hotel Saver Gift",
+    subTitle: `You’re about to receive a $100 coupon that you can redeem and use at 1,000,000
+      worldwide hotels and resorts up to 2-years, once redeemed. There is nothing to join,
+      no blackout dates, no travel restrictions, and no timeshare presentations to attend.<br />
+      <b>NO GIMMICKS, JUST SAVINGS</b><br /><br />
+      <small>You will be emailed with instructions how to use this within 5-minutes once 
+      submitted</small>`,
+    buttonText: "Start",
+    logo: "",
+    isActive: "1",
+    showQuestionCount: "Yes",
+  });
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -538,7 +550,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     setSubmitting(true);
     // Call Django view to create new form using Jotform API
     const data = JSON.parse(JSON.stringify(values));
-    data.welcomePage = welcomePage;
+    // data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     data.verificationCode = verificationCode;
     axios
@@ -562,10 +574,10 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setWelcomePage((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    // setWelcomePage((prevState) => ({
+    //   ...prevState,
+    //   [name]: value,
+    // }));
   };
 
   const handleKeyDown = (e) => {
@@ -575,7 +587,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
   };
 
   useEffect(() => {
-    setWelcomePage(initialWelcomePage);
+    // setWelcomePage(initialWelcomePage);
   }, [initialWelcomePage]);
 
   useEffect(() => {
@@ -584,70 +596,74 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
 
   return (
     <>
-      <Box sx={modalStyle}>
-        <MDBox>
-          <Button onClick={() => setOpenChild(true)}>Click to add/change logo</Button>
-          <Modal
-            open={openChild}
-            onClose={() => setOpenChild(false)}
-            aria-labelledby="child-modal-title"
-            aria-describedby="child-modal-description"
-          >
-            <Box sx={{ ...modalStyle, width: 500 }}>
-              <h2 id="child-modal-title">Add logo</h2>
-              <p id="child-modal-description" style={{ fontSize: "14px", margin: "10px 0 15px 0" }}>
-                Upload your image to an image hosting website (such as Imgur, Flickr, or Google
-                Photos), copy the image URL, and paste it into the input field below.
-              </p>
-              <TextField
-                variant="standard"
-                // style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
-                id="welcomePageLogo"
-                type="text"
-                name="logo"
-                value={welcomePage.logo}
-                onChange={handleChange}
-              />
-              <Button onClick={() => setOpenChild(false)}>Add/Change Logo</Button>
-            </Box>
-          </Modal>
-
-          <InputBase
-            variant="standard"
-            style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
-            className={useStyles().input}
-            id="welcomePageTitle"
-            type="text"
-            name="title"
-            value={welcomePage.title}
-            onChange={handleChange}
-          />
-        </MDBox>
-        <MDBox>
-          <InputBase
-            variant="standard"
-            style={{ width: "100%", marginBottom: "20px" }}
-            className={useStyles().input}
-            id="welcomePageSubTitle"
-            type="text"
-            name="subTitle"
-            value={welcomePage.subTitle}
-            onChange={handleChange}
-          />
-        </MDBox>
-        <MDBox>
-          <InputBase
-            variant="standard"
-            style={{ width: "100%", backgroundColor: "steelblue", color: "white" }}
-            className={useStyles().input}
-            id="welcomePageButtonText"
-            type="text"
-            name="buttonText"
-            value={welcomePage.buttonText}
-            onChange={handleChange}
-          />
-        </MDBox>
-      </Box>
+      <div
+        style={{
+          textAlign: "center",
+          fontWeight: "bold",
+          letterSpacing: "5px",
+          marginBottom: "8px",
+        }}
+      >
+        <Box>
+          <MDBox>
+            <Button onClick={() => setOpenChild(true)}>Click to add logo</Button>
+            <Modal
+              open={openChild}
+              onClose={() => setOpenChild(false)}
+              aria-labelledby="child-modal-title"
+              aria-describedby="child-modal-description"
+            >
+              <Box sx={{ ...modalStyle, width: 500 }}>
+                <h2 id="child-modal-title">Add logo</h2>
+                <p
+                  id="child-modal-description"
+                  style={{ fontSize: "14px", margin: "10px 0 15px 0" }}
+                >
+                  Upload your image to an image hosting website (such as Imgur, Flickr, or Google
+                  Photos), copy the image URL, and paste it into the input field below.
+                </p>
+                <TextField
+                  variant="standard"
+                  // style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
+                  id="welcomePageLogo"
+                  type="text"
+                  name="logo"
+                  value={welcomePage.logo}
+                  onChange={handleChange}
+                />
+                <Button onClick={() => setOpenChild(false)}>Add Logo</Button>
+              </Box>
+            </Modal>
+            <p
+              variant="standard"
+              style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
+              className={useStyles().input}
+              id="welcomePageTitle"
+              type="text"
+              name="title"
+              onChange={handleChange}
+              dangerouslySetInnerHTML={{ __html: welcomePage.title }}
+            />
+          </MDBox>
+          <MDBox>
+            <p
+              variant="standard"
+              style={{
+                width: "100%",
+                marginBottom: "20px",
+                fontWeight: "400",
+                textAlign: "center",
+              }}
+              className={useStyles().input}
+              id="welcomePageSubTitle"
+              type="text"
+              name="subTitle"
+              onChange={handleChange}
+              dangerouslySetInnerHTML={{ __html: welcomePage.subTitle }}
+            />
+          </MDBox>
+        </Box>
+      </div>
       <Formik initialValues={initialValues} onSubmit={onSubmit} enableReinitialize="true">
         {({ values, setValues, isSubmitting }) => (
           <Form onKeyDown={handleKeyDown}>
@@ -662,9 +678,11 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
                     <Box sx={{ display: "flex" }}>
                       <CssBaseline />
                       <AppBar
-                        style={{ backgroundColor: "cadetblue" }}
                         position="absolute"
-                        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        sx={{
+                          backgroundColor: "info.main",
+                          zIndex: (theme) => theme.zIndex.drawer + 1,
+                        }}
                       >
                         <Toolbar>
                           <Typography
