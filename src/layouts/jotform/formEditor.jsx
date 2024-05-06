@@ -141,7 +141,7 @@ function FieldRequiredCheckboxComponent(props) {
 /* <MenuItem value="control_address">Address</MenuItem> */
 /* <MenuItem value="control_number">Number</MenuItem> */
 
-/* <MenuItem value="control_datetime">Date</MenuItem> */
+/* <MenuItem value="control_date">Date</MenuItem> */
 /* <MenuItem value="control_signature">Signature</MenuItem> */
 
 function generateElement(push, identifier, type, text, repr, icon, required = true, options = "") {
@@ -174,7 +174,7 @@ function ElementList(push) {
       {generateElement(
         push,
         "control_birthday",
-        "control_datetime",
+        "control_date",
         "Birthday",
         "Birthday",
         <CakeIcon />
@@ -406,7 +406,7 @@ function getFieldRepr(field, index, showVerificationButton) {
           </Grid>
         </Grid>
       );
-    case "control_datetime":
+    case "control_date":
       return (
         <Grid container style={{ padding: "0" }}>
           <Grid item xs={12}>
