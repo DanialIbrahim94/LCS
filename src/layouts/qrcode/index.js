@@ -29,7 +29,7 @@ function QRcode() {
 
   useEffect(() => {
     if (userinfo.jotform_id) {
-      const jotformLink = `https://form.jotform.com/${userinfo.jotform_id}`;
+      const jotformLink = `${process.env.REACT_APP_BACKEND_URL}submit/${userinfo.jotform_id}/`;
       setFormLink(jotformLink);
     }
   }, []); // Empty array as a dependency to only run once

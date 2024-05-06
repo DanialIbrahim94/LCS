@@ -168,22 +168,15 @@ function generateElement(push, identifier, type, text, repr, icon, required = tr
 function ElementList(push) {
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.level1" }} aria-label="Items">
-      {generateElement(
-        push,
-        "control_fullname",
-        "control_fullname",
-        "Full Name",
-        "Full Name",
-        <AccountBoxIcon />
-      )}
+      {generateElement(push, "control_input", "control_input", "Name", "Name", <AccountBoxIcon />)}
       {generateElement(push, "control_email", "control_email", "Email", "Email", <EmailIcon />)}
       {generateElement(push, "control_phone", "control_phone", "Phone", "Phone", <PhoneIcon />)}
       {generateElement(
         push,
         "control_birthday",
         "control_datetime",
-        "Birth Date",
-        "Birth Date",
+        "Birthday",
+        "Birthday",
         <CakeIcon />
       )}
       {generateElement(
@@ -304,7 +297,7 @@ function ElementList(push) {
 
 function getFieldRepr(field, index, showVerificationButton) {
   switch (field.identifier) {
-    case "control_fullname":
+    case "control_input":
       return (
         <Grid container>
           <Grid item xs={12}>
@@ -353,21 +346,6 @@ function getFieldRepr(field, index, showVerificationButton) {
                 disabled
               />
             </label>
-            {showVerificationButton && (
-              <Button
-                style={{
-                  backgroundColor: "gray",
-                  width: "29%",
-                  height: "100%",
-                  marginLeft: "auto",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                }}
-                disabled
-              >
-                Send Verification Code
-              </Button>
-            )}
           </Grid>
         </Grid>
       );
@@ -430,13 +408,17 @@ function getFieldRepr(field, index, showVerificationButton) {
       );
     case "control_datetime":
       return (
-        <Grid container mt={-5} style={{ padding: "0" }}>
-          <Grid item xs={12} style={{ textAlign: "center", paddingTop: "0" }}>
-            <img
-              src="https://raw.githubusercontent.com/HandyOrg/HandyOrgResource/master/HandyControl/Doc/extend_controls/DateTimePicker_2.png"
-              alt=""
-              style={{ width: "100%", height: "100%" }}
-            />
+        <Grid container style={{ padding: "0" }}>
+          <Grid item xs={12}>
+            <label htmlFor="birthday">
+              {field.text}
+              <input
+                type="date"
+                variant="outlined"
+                style={{ marginLeft: "40px", minWidth: "200px", textAlign: "center" }}
+                disabled
+              />
+            </label>
           </Grid>
         </Grid>
       );
@@ -450,7 +432,7 @@ function getFieldRepr(field, index, showVerificationButton) {
             </label>
             <br />
             <label htmlFor="state">
-              State, City
+              City, State
               <input type="text" id="state" disabled style={{ marginLeft: "40px" }} />
             </label>
           </Grid>
@@ -556,7 +538,6 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     axios
       .put(`/jotform/${userinfo.id}/update/`, data)
       .then((res) => {
-        updateUserInfo(res.data.form_id);
         notification.success({
           message: res.data.message,
           placement: "bottomRight",
@@ -606,7 +587,6 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
       >
         <Box>
           <MDBox>
-            <Button onClick={() => setOpenChild(true)}>Click to add logo</Button>
             <Modal
               open={openChild}
               onClose={() => setOpenChild(false)}
@@ -798,21 +778,20 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
                                     float: "right",
                                   }}
                                 >
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={verificationCode}
-                                        onChange={(e) => {
-                                          setVerificationCode(e.target.checked);
-                                        }}
-                                        inputProps={{ "aria-label": "controlled" }}
-                                        style={{ padding: "6px" }}
-                                        size="small"
-                                      />
-                                    }
-                                    label="Use verification code"
-                                    labelPlacement="start"
-                                  />
+                                  <Tooltip title="Already specified on form creation">
+                                    <FormControlLabel
+                                      control={
+                                        <Switch
+                                          checked={verificationCode}
+                                          inputProps={{ "aria-label": "controlled" }}
+                                          style={{ padding: "6px" }}
+                                          size="small"
+                                        />
+                                      }
+                                      label="Use verification code"
+                                      labelPlacement="start"
+                                    />
+                                  </Tooltip>
                                 </Grid>
                               )}
 

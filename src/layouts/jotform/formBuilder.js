@@ -14,7 +14,6 @@ import MDBox from "components/MDBox";
 import Button from "@mui/material/Button";
 import MDTypography from "components/MDTypography";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -169,22 +168,15 @@ function generateElement(push, identifier, type, text, repr, icon, required = tr
 function ElementList(push) {
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.level1" }} aria-label="Items">
-      {generateElement(
-        push,
-        "control_fullname",
-        "control_fullname",
-        "Full Name",
-        "Full Name",
-        <AccountBoxIcon />
-      )}
+      {generateElement(push, "control_input", "control_input", "Name", "Name", <AccountBoxIcon />)}
       {generateElement(push, "control_email", "control_email", "Email", "Email", <EmailIcon />)}
       {generateElement(push, "control_phone", "control_phone", "Phone", "Phone", <PhoneIcon />)}
       {generateElement(
         push,
         "control_birthday",
         "control_datetime",
-        "Birth Date",
-        "Birth Date",
+        "Birthday",
+        "Birthday",
         <CakeIcon />
       )}
       {generateElement(
@@ -305,7 +297,7 @@ function ElementList(push) {
 
 function getFieldRepr(field, index, showVerificationButton) {
   switch (field.identifier) {
-    case "control_fullname":
+    case "control_input":
       return (
         <Grid container>
           <Grid item xs={12}>
@@ -354,21 +346,6 @@ function getFieldRepr(field, index, showVerificationButton) {
                 disabled
               />
             </label>
-            {showVerificationButton && (
-              <Button
-                style={{
-                  backgroundColor: "gray",
-                  width: "29%",
-                  height: "100%",
-                  marginLeft: "auto",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                }}
-                disabled
-              >
-                Send Verification Code
-              </Button>
-            )}
           </Grid>
         </Grid>
       );
@@ -451,7 +428,7 @@ function getFieldRepr(field, index, showVerificationButton) {
             </label>
             <br />
             <label htmlFor="state">
-              State, City
+              City, State
               <input type="text" id="state" disabled style={{ marginLeft: "40px" }} />
             </label>
           </Grid>
@@ -516,7 +493,7 @@ function FormBuilder({ setEditorView }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
   const [openChild, setOpenChild] = useState(false);
-  const [verificationCode, setVerificationCode] = useState(false);
+  const [verificationCode, setVerificationCode] = useState(true);
   const [welcomePage, setWelcomePage] = useState({
     title: "<b style='color: #4a98d2;'>The $100</b> Hotel Saver Gift",
     subTitle: `You’re about to receive a $100 coupon that you can redeem and use at 1,000,000
@@ -562,7 +539,7 @@ function FormBuilder({ setEditorView }) {
     setSubmitting(true);
     // Call Django view to create new form using Jotform API
     const data = JSON.parse(JSON.stringify(values));
-    data.welcomePage = welcomePage;
+    // data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     data.verificationCode = verificationCode;
     axios
@@ -609,7 +586,6 @@ function FormBuilder({ setEditorView }) {
       >
         <Box>
           <MDBox>
-            <Button onClick={() => setOpenChild(true)}>Click to add logo</Button>
             <Modal
               open={openChild}
               onClose={() => setOpenChild(false)}
@@ -811,24 +787,21 @@ function FormBuilder({ setEditorView }) {
                                     float: "right",
                                   }}
                                 >
-                                  <Tooltip title="Only available on a card form">
-                                    <FormControlLabel
-                                      control={
-                                        <Switch
-                                          checked={verificationCode}
-                                          onChange={(e) => {
-                                            setVerificationCode(e.target.checked);
-                                          }}
-                                          inputProps={{ "aria-label": "controlled" }}
-                                          style={{ padding: "6px" }}
-                                          size="small"
-                                        />
-                                      }
-                                      label="Use verification code"
-                                      labelPlacement="start"
-                                      disabled
-                                    />
-                                  </Tooltip>
+                                  <FormControlLabel
+                                    control={
+                                      <Switch
+                                        checked={verificationCode}
+                                        onChange={(e) => {
+                                          setVerificationCode(e.target.checked);
+                                        }}
+                                        inputProps={{ "aria-label": "controlled" }}
+                                        style={{ padding: "6px" }}
+                                        size="small"
+                                      />
+                                    }
+                                    label="Use verification code"
+                                    labelPlacement="start"
+                                  />
                                 </Grid>
                               )}
 
