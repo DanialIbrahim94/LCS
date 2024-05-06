@@ -174,7 +174,7 @@ function ElementList(push) {
       {generateElement(
         push,
         "control_birthday",
-        "control_datetime",
+        "control_date",
         "Birthday",
         "Birthday",
         <CakeIcon />
