@@ -428,8 +428,13 @@ function getFieldRepr(field, index, showVerificationButton) {
             </label>
             <br />
             <label htmlFor="state">
-              City, State
+              State
               <input type="text" id="state" disabled style={{ marginLeft: "40px" }} />
+            </label>
+            <br />
+            <label htmlFor="city">
+              City
+              <input type="text" id="city" disabled style={{ marginLeft: "40px" }} />
             </label>
           </Grid>
         </Grid>
@@ -615,7 +620,12 @@ function FormBuilder({ setEditorView }) {
             </Modal>
             <p
               variant="standard"
-              style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
+              style={{
+                width: "100%",
+                fontSize: "32px",
+                fontWeight: "600",
+                letterSpacing: "normal",
+              }}
               className={useStyles().input}
               id="welcomePageTitle"
               type="text"
@@ -632,6 +642,7 @@ function FormBuilder({ setEditorView }) {
                 marginBottom: "20px",
                 fontWeight: "400",
                 textAlign: "center",
+                letterSpacing: "normal",
               }}
               className={useStyles().input}
               id="welcomePageSubTitle"
