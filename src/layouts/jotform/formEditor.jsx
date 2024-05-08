@@ -123,11 +123,11 @@ function FieldDescriptionInputComponent(props) {
   );
 }
 
-function FieldRequiredCheckboxComponent(props) {
+function FieldRequiredCheckboxComponent({ checked, ...otherProps }) {
   return (
     <FormControlLabel
       style={{ margin: "0", marginTop: "5px" }}
-      control={<Checkbox size="small" {...props} defaultChecked />}
+      control={<Checkbox size="small" {...otherProps} checked={checked} />}
       label="Required"
     />
   );
@@ -301,10 +301,9 @@ function getFieldRepr(field, index, showVerificationButton) {
       return (
         <Grid container>
           <Grid item xs={12}>
-            <label htmlFor="first-name">
+            <label htmlFor="input">
               {field.text}
-              <input type="text" id="first-name" disabled style={{ marginLeft: "40px" }} />
-              <input type="text" id="last-name" disabled style={{ marginLeft: "20px" }} />
+              <input type="text" id="input" disabled style={{ marginLeft: "40px" }} />
             </label>
           </Grid>
         </Grid>
@@ -458,7 +457,18 @@ function getFieldRepr(field, index, showVerificationButton) {
         </Grid>
       );
     case "control_dropdown":
-      return null;
+      return (
+        <Grid container>
+          <Grid item xs={12}>
+            <label htmlFor="country">
+              {field.text}
+              <select type="text" id="country" disabled style={{ marginLeft: "40px" }}>
+                <option>United States</option>
+              </select>
+            </label>
+          </Grid>
+        </Grid>
+      );
     case "control_radio":
       return null;
     case "control_checkbox":
@@ -762,22 +772,6 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
 
                               {getFieldRepr(field, index, verificationCode)}
 
-                              {(field.type === "control_dropdown" ||
-                                field.type === "control_checkbox" ||
-                                field.identifier === "control_radio") && (
-                                <Field
-                                  component={multiChoiceInputComponent}
-                                  name={`formElements[${index}].options`}
-                                />
-                              )}
-
-                              {field.identifier === "control_martial" && (
-                                <Field
-                                  component={martialStatusInputComponent}
-                                  name={`formElements[${index}].options`}
-                                />
-                              )}
-
                               {field.identifier === "control_email" && (
                                 <Grid
                                   item
@@ -809,6 +803,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
                               <Field
                                 as={FieldRequiredCheckboxComponent}
                                 name={`formElements[${index}].required`}
+                                checked={field.required} // Assuming field.required is a boolean indicating if the checkbox should be checked
                               />
                             </div>
                           </div>
@@ -839,7 +834,9 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     </>
   );
 }
-
+FieldRequiredCheckboxComponent.propTypes = {
+  checked: PropTypes.bool.isRequired, // Add prop validation for checked prop
+};
 FormEditor.propTypes = {
   initialValues: PropTypes.func.isRequired,
   initialWelcomePage: PropTypes.func.isRequired,

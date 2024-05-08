@@ -301,10 +301,9 @@ function getFieldRepr(field, index, showVerificationButton) {
       return (
         <Grid container>
           <Grid item xs={12}>
-            <label htmlFor="first-name">
+            <label htmlFor="input">
               {field.text}
-              <input type="text" id="first-name" disabled style={{ marginLeft: "40px" }} />
-              <input type="text" id="last-name" disabled style={{ marginLeft: "20px" }} />
+              <input type="text" id="input" disabled style={{ marginLeft: "40px" }} />
             </label>
           </Grid>
         </Grid>
