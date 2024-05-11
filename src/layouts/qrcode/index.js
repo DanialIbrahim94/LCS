@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Tooltip from "@mui/material/Tooltip";
+import Zoom from "@mui/material/Zoom";
 import MDBox from "components/MDBox";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -124,8 +125,13 @@ function QRcode() {
                           to the back of your business cards.
                         </p>
 
-                        <MDBox style={{ textAlign: "center" }}>
-                          <Tooltip title="You can RIGHT CLICK and save this to your harddrive">
+                        <Tooltip
+                          title="You can RIGHT CLICK and save this to your harddrive"
+                          TransitionComponent={Zoom}
+                          TransitionProps={{ timeout: 200 }}
+                          placement="left"
+                        >
+                          <MDBox style={{ textAlign: "center" }}>
                             <QRCode
                               value={formLink}
                               level="H"
@@ -133,8 +139,8 @@ function QRcode() {
                               renderAs="canvas"
                               size={300}
                             />
-                          </Tooltip>
-                        </MDBox>
+                          </MDBox>
+                        </Tooltip>
 
                         <p>
                           NOTE: Simply do a screenshot of YOUR unique QR Code and paste on your

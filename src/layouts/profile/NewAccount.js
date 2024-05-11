@@ -13,6 +13,11 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useNavigate } from "react-router-dom";
 import { notification } from "antd";
+import Input from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 
 function ProfileInfoCard() {
   const [business, setBusiness] = useState([]);
@@ -22,6 +27,14 @@ function ProfileInfoCard() {
   const [couponCode, setCouponCode] = useState(null);
   const navigate = useNavigate();
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   const getRoleList = () => {
     axios
@@ -266,14 +279,29 @@ function ProfileInfoCard() {
               </MDBox>
             )}
             <MDBox mb={2} style={{display: userinfo.role.id === 3 ? "none" : "inherit"}}>
-              <MDInput
-                type="password"
-                label="Password"
-                name="password"
-                variant="standard"
-                value={userinfo.role.id === 3 ? "0000" : null}
-                fullWidth
-              />
+              <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                <Input
+                  label="Password"
+                  name="password"
+                  variant="standard"
+                  value={userinfo.role.id === 3 ? "0000" : null}
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDBox width="50%" mx="auto">
