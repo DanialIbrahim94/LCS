@@ -95,15 +95,15 @@ function Overview() {
             <StyledCard style={{ flexGrow: 1 }}>
               <CardContent style={{ display: "contents" }}>
                 <Typography variant="h5" component="h2" gutterBottom px="20px" pt="10px">
-                  <span style={{ color: "white", fontWeight: "bolder" }}>View Submissions</span>
+                  <span style={{ color: "white", fontWeight: "bolder" }}>Preview Form</span>
                 </Typography>
                 <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
-                  View the submissions received from your forms.
+                  Generate a QR code for easy sharing and scanning of your form.
                 </Typography>
                 <Box mt="auto" pt="0" px="20px" pb="20px">
-                  <Link to="/submissions">
+                  <Link to="/qrcode">
                     <StyledButton variant="contained" fullWidth size="large">
-                      View Submissions
+                      PREVIEW FORM
                     </StyledButton>
                   </Link>
                 </Box>
@@ -114,15 +114,15 @@ function Overview() {
             <StyledCard style={{ flexGrow: 1 }}>
               <CardContent style={{ display: "contents" }}>
                 <Typography variant="h5" component="h2" gutterBottom px="20px" pt="10px">
-                  <span style={{ color: "white", fontWeight: "bolder" }}>Peview Form</span>
+                  <span style={{ color: "white", fontWeight: "bolder" }}>View Submissions</span>
                 </Typography>
                 <Typography variant="body1" color="textSecondary" mt={2} px="20px" pb="30px">
-                  Generate a QR code for easy sharing and scanning of your form.
+                  View the submissions received from your forms.
                 </Typography>
                 <Box mt="auto" pt="0" px="20px" pb="20px">
-                  <Link to="/qrcode">
+                  <Link to="/submissions">
                     <StyledButton variant="contained" fullWidth size="large">
-                      PREVIEW FORM
+                      View Submissions
                     </StyledButton>
                   </Link>
                 </Box>
