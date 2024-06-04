@@ -511,6 +511,7 @@ function getFieldRepr(field, index, showVerificationButton) {
 function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
+  const [logoURL, setLogoURL] = useState();
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(false);
   const [welcomePage, setWelcomePage] = useState({
@@ -550,6 +551,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     // data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     data.verificationCode = verificationCode;
+    data.logoURL = logoURL;
     axios
       .put(`/jotform/${userinfo.id}/update/`, data)
       .then((res) => {
@@ -568,12 +570,9 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     // Redirect to newly created form
   };
 
-  const handleChange = (event) => {
+  const handleLogoChange = (event) => {
     const { name, value } = event.target;
-    // setWelcomePage((prevState) => ({
-    //   ...prevState,
-    //   [name]: value,
-    // }));
+    setLogoURL(value);
   };
 
   const handleKeyDown = (e) => {
@@ -602,6 +601,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
       >
         <Box>
           <MDBox>
+            <Button onClick={() => setOpenChild(true)}>Click to change logo</Button>
             <Modal
               open={openChild}
               onClose={() => setOpenChild(false)}
@@ -623,8 +623,8 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
                   id="welcomePageLogo"
                   type="text"
                   name="logo"
-                  value={welcomePage.logo}
-                  onChange={handleChange}
+                  value={logoURL}
+                  onChange={handleLogoChange}
                 />
                 <Button onClick={() => setOpenChild(false)}>Add Logo</Button>
               </Box>
@@ -641,7 +641,6 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
               id="welcomePageTitle"
               type="text"
               name="title"
-              onChange={handleChange}
               dangerouslySetInnerHTML={{ __html: welcomePage.title }}
             />
           </MDBox>
@@ -659,7 +658,6 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
               id="welcomePageSubTitle"
               type="text"
               name="subTitle"
-              onChange={handleChange}
               dangerouslySetInnerHTML={{ __html: welcomePage.subTitle }}
             />
           </MDBox>

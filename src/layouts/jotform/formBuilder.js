@@ -496,6 +496,7 @@ function getFieldRepr(field, index, showVerificationButton) {
 function FormBuilder({ setEditorView }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
+  const [logoURL, setLogoURL] = useState();
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(true);
   const [welcomePage, setWelcomePage] = useState({
@@ -568,10 +569,7 @@ function FormBuilder({ setEditorView }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setWelcomePage((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setLogoURL(value);
   };
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -590,6 +588,7 @@ function FormBuilder({ setEditorView }) {
       >
         <Box>
           <MDBox>
+            <Button onClick={() => setOpenChild(true)}>Click to add logo</Button>
             <Modal
               open={openChild}
               onClose={() => setOpenChild(false)}
@@ -611,7 +610,7 @@ function FormBuilder({ setEditorView }) {
                   id="welcomePageLogo"
                   type="text"
                   name="logo"
-                  value={welcomePage.logo}
+                  value={logoURL}
                   onChange={handleChange}
                 />
                 <Button onClick={() => setOpenChild(false)}>Add Logo</Button>
@@ -629,7 +628,6 @@ function FormBuilder({ setEditorView }) {
               id="welcomePageTitle"
               type="text"
               name="title"
-              onChange={handleChange}
               dangerouslySetInnerHTML={{ __html: welcomePage.title }}
             />
           </MDBox>
@@ -647,7 +645,6 @@ function FormBuilder({ setEditorView }) {
               id="welcomePageSubTitle"
               type="text"
               name="subTitle"
-              onChange={handleChange}
               dangerouslySetInnerHTML={{ __html: welcomePage.subTitle }}
             />
           </MDBox>
