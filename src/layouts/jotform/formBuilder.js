@@ -504,9 +504,7 @@ function FormBuilder({ setEditorView }) {
     subTitle: `You’re about to receive a $100 coupon that you can redeem and use at 1,000,000
       worldwide hotels and resorts up to 2-years, once redeemed. There is nothing to join,
       no blackout dates, no travel restrictions, and no timeshare presentations to attend.<br />
-      <b>NO GIMMICKS, JUST SAVINGS</b><br /><br />
-      <small>You will be emailed with instructions how to use this within 5-minutes once 
-      submitted</small>`,
+      <b>NO GIMMICKS, JUST SAVINGS!</b><br /><br />`,
     buttonText: "Start",
     logo: "",
     isActive: "1",

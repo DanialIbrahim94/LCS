@@ -512,6 +512,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
   const [logoURL, setLogoURL] = useState();
+  const [logoFile, setLogoFile] = useState();
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(false);
   const [welcomePage, setWelcomePage] = useState({
@@ -519,9 +520,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     subTitle: `You’re about to receive a $100 coupon that you can redeem and use at 1,000,000
       worldwide hotels and resorts up to 2-years, once redeemed. There is nothing to join,
       no blackout dates, no travel restrictions, and no timeshare presentations to attend.<br />
-      <b>NO GIMMICKS, JUST SAVINGS</b><br /><br />
-      <small>You will be emailed with instructions how to use this within 5-minutes once 
-      submitted</small>`,
+      <b>NO GIMMICKS, JUST SAVINGS!</b><br /><br />`,
     buttonText: "Start",
     logo: "",
     isActive: "1",
@@ -551,7 +550,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     // data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     data.verificationCode = verificationCode;
-    data.logoURL = logoURL;
+    data.logoFile = logoFile;
     axios
       .put(`/jotform/${userinfo.id}/update/`, data)
       .then((res) => {
@@ -570,9 +569,9 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     // Redirect to newly created form
   };
 
-  const handleLogoChange = (event) => {
+  const handleLogoUpload = (event) => {
     const { name, value } = event.target;
-    setLogoURL(value);
+    setLogoFile(value);
   };
 
   const handleKeyDown = (e) => {
@@ -601,34 +600,17 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
       >
         <Box>
           <MDBox>
-            <Button onClick={() => setOpenChild(true)}>Click to change logo</Button>
-            <Modal
-              open={openChild}
-              onClose={() => setOpenChild(false)}
-              aria-labelledby="child-modal-title"
-              aria-describedby="child-modal-description"
-            >
-              <Box sx={{ ...modalStyle, width: 500 }}>
-                <h2 id="child-modal-title">Add logo</h2>
-                <p
-                  id="child-modal-description"
-                  style={{ fontSize: "14px", margin: "10px 0 15px 0" }}
-                >
-                  Upload your image to an image hosting website (such as Imgur, Flickr, or Google
-                  Photos), copy the image URL, and paste it into the input field below.
-                </p>
-                <TextField
-                  variant="standard"
-                  // style={{ width: "100%", fontSize: "32px", fontWeight: "600" }}
-                  id="welcomePageLogo"
-                  type="text"
-                  name="logo"
-                  value={logoURL}
-                  onChange={handleLogoChange}
-                />
-                <Button onClick={() => setOpenChild(false)}>Add Logo</Button>
-              </Box>
-            </Modal>
+            <p id="child-modal-description" style={{ fontSize: "14px", margin: "10px 0 15px 0" }}>
+              Click to change logo
+            </p>
+            <input
+              accept="image/*"
+              style={{ display: "block" }}
+              id="logo-upload"
+              type="file"
+              onChange={handleLogoUpload}
+            />
+            {logoURL && <img src={logoURL} alt="Logo" />}
             <p
               variant="standard"
               style={{
