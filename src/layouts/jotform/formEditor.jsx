@@ -517,10 +517,10 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
   const [verificationCode, setVerificationCode] = useState(false);
   const [welcomePage, setWelcomePage] = useState({
     title: "<b style='color: #4a98d2;'>The $100</b> Hotel Saver Gift",
-    subTitle: `You’re about to receive a $100 coupon that you can redeem and use at 1,000,000
-      worldwide hotels and resorts up to 2-years, once redeemed. There is nothing to join,
-      no blackout dates, no travel restrictions, and no timeshare presentations to attend.<br />
-      <b>NO GIMMICKS, JUST SAVINGS!</b><br /><br />`,
+    subTitle: `You’re about to receive a FREE coupon valued up to $100 in GUARANTEED hotel savings* BELOW the prices listed on Expedia, Priceline and many others. <br />
+      You can use the savings on up to 1,000,000 worldwide hotels and resorts up to 2-years, once redeemed. There is nothing to join, no blackout dates, no travel restrictions, and no timeshare presentations to attend. <br />
+      <b>NO GIMMICKS, JUST SAVINGS!</b><br /><br />
+      The amount of savings will vary based on the time of year, the length of stay, the type of property and any special events going on in the area at the time of booking. <br />`,
     buttonText: "Start",
     logo: "",
     isActive: "1",
@@ -630,8 +630,8 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
             <p
               variant="standard"
               style={{
-                width: "100%",
-                marginBottom: "20px",
+                width: "80%",
+                margin: "auto",
                 fontWeight: "400",
                 textAlign: "center",
                 letterSpacing: "normal",
