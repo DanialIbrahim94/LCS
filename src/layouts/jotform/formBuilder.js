@@ -497,7 +497,7 @@ function getFieldRepr(field, index, showVerificationButton) {
 function FormBuilder({ setEditorView }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
-  const [referralId, setReferralId] = useState();
+  const [referralId, setReferralId] = useState('');
   const [logoURL, setLogoURL] = useState();
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(true);

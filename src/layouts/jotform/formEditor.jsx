@@ -585,7 +585,7 @@ function FormEditor({
 
   const handleReferralIdChange = (event) => {
     const { name, value } = event.target;
-    setReferralId(value);
+    setReferralId(value || '');
   };
 
   const handleKeyDown = (e) => {
