@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import Grid from "@mui/material/Grid";
 import ClearIcon from "@mui/icons-material/Clear";
+import MDInput from "components/MDInput";
 import MDBox from "components/MDBox";
 import Button from "@mui/material/Button";
 import MDTypography from "components/MDTypography";
@@ -496,6 +497,7 @@ function getFieldRepr(field, index, showVerificationButton) {
 function FormBuilder({ setEditorView }) {
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
+  const [referralId, setReferralId] = useState();
   const [logoURL, setLogoURL] = useState();
   const [openChild, setOpenChild] = useState(false);
   const [verificationCode, setVerificationCode] = useState(true);
@@ -545,6 +547,7 @@ function FormBuilder({ setEditorView }) {
     // data.welcomePage = welcomePage;
     data.user_id = userinfo.id;
     data.verificationCode = verificationCode;
+    data.referralId = referralId;
     axios
       .post(`/jotform/create/`, data)
       .then((res) => {
@@ -569,6 +572,12 @@ function FormBuilder({ setEditorView }) {
     const { name, value } = event.target;
     setLogoURL(value);
   };
+
+  const handleReferralIdChange = (event) => {
+    const { name, value } = event.target;
+    setReferralId(value);
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -586,6 +595,25 @@ function FormBuilder({ setEditorView }) {
       >
         <Box>
           <MDBox>
+            <div
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                letterSpacing: "2px",
+                width: "400px",
+                margin: "auto",
+              }}
+            >
+              <MDInput
+                type="text"
+                name="refferal_id"
+                label="Refferal ID"
+                size="small"
+                onChange={handleReferralIdChange}
+                value={referralId}
+                fullWidth
+              />
+            </div>
             <Button onClick={() => setOpenChild(true)}>Click to add logo</Button>
             <Modal
               open={openChild}

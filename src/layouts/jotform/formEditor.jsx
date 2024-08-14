@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "utils/axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
@@ -9,6 +9,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Grid from "@mui/material/Grid";
 import ClearIcon from "@mui/icons-material/Clear";
+import MDInput from "components/MDInput";
 import MDBox from "components/MDBox";
 import Button from "@mui/material/Button";
 import MDTypography from "components/MDTypography";
@@ -508,9 +509,16 @@ function getFieldRepr(field, index, showVerificationButton) {
   }
 }
 
-function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode }) {
+function FormEditor({
+  initialValues,
+  initialWelcomePage,
+  initialVerificationCode,
+  initialReferralId,
+}) {
+  const inputRef = useRef(null);
   const userinfo = JSON.parse(sessionStorage.getItem("userData"));
   const [open, setOpen] = useState(false);
+  const [referralId, setReferralId] = useState();
   const [logoURL, setLogoURL] = useState();
   const [logoFile, setLogoFile] = useState();
   const [openChild, setOpenChild] = useState(false);
@@ -551,6 +559,7 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     data.user_id = userinfo.id;
     data.verificationCode = verificationCode;
     data.logoFile = logoFile;
+    data.referralId = referralId;
     axios
       .put(`/jotform/${userinfo.id}/update/`, data)
       .then((res) => {
@@ -574,6 +583,11 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
     setLogoFile(value);
   };
 
+  const handleReferralIdChange = (event) => {
+    const { name, value } = event.target;
+    setReferralId(value);
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -581,12 +595,18 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
   };
 
   useEffect(() => {
-    // setWelcomePage(initialWelcomePage);
-  }, [initialWelcomePage]);
+    setReferralId(initialReferralId);
+  }, [initialReferralId]);
 
   useEffect(() => {
     setVerificationCode(initialVerificationCode);
   }, [initialVerificationCode]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.value = referralId;
+    }
+  }, []);
 
   return (
     <>
@@ -599,6 +619,26 @@ function FormEditor({ initialValues, initialWelcomePage, initialVerificationCode
         }}
       >
         <Box>
+          <div
+            style={{
+              textAlign: "center",
+              fontWeight: "bold",
+              letterSpacing: "2px",
+              width: "400px",
+              margin: "auto",
+            }}
+          >
+            <MDInput
+              type="text"
+              name="refferal_id"
+              label="Refferal ID"
+              size="small"
+              onChange={handleReferralIdChange}
+              value={referralId}
+              inputRef={inputRef}
+              fullWidth
+            />
+          </div>
           <MDBox>
             <p id="child-modal-description" style={{ fontSize: "14px", margin: "10px 0 15px 0" }}>
               Click to change logo
@@ -821,6 +861,7 @@ FormEditor.propTypes = {
   initialValues: PropTypes.func.isRequired,
   initialWelcomePage: PropTypes.func.isRequired,
   initialVerificationCode: PropTypes.func.isRequired,
+  initialReferralId: PropTypes.func.isRequired,
 };
 
 export default FormEditor;

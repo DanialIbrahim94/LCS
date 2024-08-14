@@ -15,6 +15,7 @@ function Jotform() {
   const [editorView, setEditorView] = useState(false);
   const [initialWelcomePage, setInitialWelcomePage] = useState({});
   const [initialVerificationCode, setInitialVerificationCode] = useState(false);
+  const [initialReferralId, setinitialReferralId] = useState();
   const [initialValues, setInitialValues] = useState({
     formName: "Form Name",
     formElements: [],
@@ -26,6 +27,7 @@ function Jotform() {
       .then((res) => {
         const formName = res.data.form.name;
         const welcomePage = res.data.form.welcome_page;
+        const referredID = res.data.form.referral_id;
         const { questions } = res.data.form;
         const formElements = [];
 
@@ -44,6 +46,7 @@ function Jotform() {
         // Set the state with the formatted data
         setInitialValues({ formName, formElements });
         setInitialWelcomePage(welcomePage);
+        setinitialReferralId(referredID);
       })
       .catch((err) => {
         console.log(err);
@@ -59,7 +62,7 @@ function Jotform() {
       setEditorView(true);
       initJotForm();
     }
-  }, []); // Empty array as a dependency to only run once
+  }, []); // Empty array as a dependency to only run once variant="standard"
 
   return (
     <DashboardLayout>
@@ -101,6 +104,7 @@ function Jotform() {
                     initialVerificationCode={initialVerificationCode}
                     initialWelcomePage={initialWelcomePage}
                     initialValues={initialValues}
+                    initialReferralId={initialReferralId}
                   />
                 ) : (
                   <FormBuilder setEditorView={setEditorView} />
